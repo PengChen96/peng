@@ -10,25 +10,25 @@ category: "blog"
 </p>
 {% endfor %}
 <div class="pagination">
-    {% if paginator.previous_page %}
-    <a href="/peng/blog/page{{ paginator.previous_page }}/" class="previous">Previous</a>
-    {% else %}
-    <span class="previous">Previous</span>
-    {% endif %}
+    <!--{% if paginator.previous_page %}-->
+    <!--<a href="/peng/blog/page{{ paginator.previous_page }}/" class="previous">Previous</a>-->
+    <!--{% else %}-->
+    <!--<span class="previous">Previous</span>-->
+    <!--{% endif %}-->
 
-    <span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
-    {% if paginator.next_page %}
-    <a href="/peng/blog/page{{ paginator.next_page }}/" class="next">Next</a>
-    {% else %}
-    <span class="next ">Next</span>
-    {% endif %}
+    <!--<span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>-->
+    <!--{% if paginator.next_page %}-->
+    <!--<a href="/peng/blog/page{{ paginator.next_page }}/" class="next">Next</a>-->
+    <!--{% else %}-->
+    <!--<span class="next ">Next</span>-->
+    <!--{% endif %}-->
 
 
     {% for page in (1..paginator.total_pages) %}
     {% if page == paginator.page %}
-    <li class="current"><a href="/peng/">{{ page }}sasasa</a></li>
+    <li class="current"><a href="#">{{ page }}</a></li>
     {% else %}
-    <li><a href="/peng/blog/{%if page > 1 %}page{{ page }}/{% endif %}">{{ page }}</a></li>
+    <li><a href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a></li>
     {% endif %}
     {% endfor %}
 </div>
