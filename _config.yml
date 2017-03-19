@@ -33,3 +33,6 @@ gems:
 exclude:
   - Gemfile
   - Gemfile.lock
+
+paginate: 2
+paginate_path: "blog/page:num"
