@@ -4,11 +4,17 @@ category: "blog"
 ---
 
 {% for post in paginator.posts %}
-<h1><a href="/peng/{{ post.url }}">{{ post.title }}</a></h1>
-<p class="author">
-    <span class="date">{{ post.date }}</span>
-</p>
+    <div class="article_info">
+        <b><a class="article_title" href="/peng/{{ post.url }}">{{ post.title }}</a></b>
+        <p>author: {{ post.author }}</p>
+        <span class="article_date">{{ post.date }}</span>
+        <div class="article_img">
+            <img src="{{post.illustration}}" alt="图片">
+        </div>
+        <p class="article_description">{{ post.description }}</p>
+    </div>
 {% endfor %}
+
 <div class="pagination">
     <!--{% if paginator.previous_page %}-->
     <!--<a href="/peng/blog/page{{ paginator.previous_page }}/" class="previous">Previous</a>-->
@@ -23,12 +29,13 @@ category: "blog"
     <!--<span class="next ">Next</span>-->
     <!--{% endif %}-->
 
-
-    {% for page in (1..paginator.total_pages) %}
-    {% if page == paginator.page %}
-    <li class="current"><a href="#">{{ page }}</a></li>
-    {% else %}
-    <li><a href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a></li>
-    {% endif %}
-    {% endfor %}
+    <ul>
+        {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+        <li class="current"><a href="#">{{ page }}</a></li>
+        {% else %}
+        <li><a href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
 </div>
