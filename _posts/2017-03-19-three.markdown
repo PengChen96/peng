@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: article
 title:  "333"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800

@@ -2,6 +2,14 @@
 layout: Index
 category: blog
 ---
+<style type="text/css">
+	.pagination ul{
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+	}
+</style>
 
 <!-- 遍历分页后的文章 -->
 {% for post in paginator.posts %}
@@ -20,7 +28,6 @@ category: blog
 		<div class="mdl-cell mdl-cell--6-col">
 		    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			  <div class="mdl-card__title" style="background: url('{{post.illustration}}') center / cover;">
-			  	<!-- <img src="{{post.illustration}}" style="width:100%;height:100%;"> -->
 			    <h2 class="mdl-card__title-text"><a href="">{{ post.title }}</a></h2>
 			  </div>
 			  <div class="mdl-card__supporting-text">
@@ -64,9 +71,17 @@ category: blog
 		    <ul>
 		        {% for page in (1..paginator.total_pages) %}
 		        {% if page == paginator.page %}
-		        <li class="current"><a href="#">{{ page }}</a></li>
+		        <li class="current">
+		        	<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" >
+		        		<a href="#" style="color:#fff;">{{ page}}</a>
+		        	</button>
+		        </li>
 		        {% else %}
-		        <li><a href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a></li>
+		        <li>
+		        	<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" >
+		        		<a style="display: block;" href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a>
+		        	</button>
+		        </li>
 		        {% endif %}
 		        {% endfor %}
 		    </ul>
