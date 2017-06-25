@@ -15,8 +15,13 @@ function a(){
 }
 ```
 `fafas`
+{% highlight ruby%}
+function a(){
+  alert("dada");
+}
+{% endhighlight %}
 
-{% highlight ruby %}
+{% highlight ruby linenos %}
 def print_hi(name)
   puts "Hi, #{name}"
 end
