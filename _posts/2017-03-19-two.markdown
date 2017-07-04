@@ -7,22 +7,192 @@ illustration: "/peng/resource/images/test02.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+Css Grid是一个强大的web二维布局工具，能够以行和列来进行布局；
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+### 1. 网格容器
+通过设置`display`的属性为`grid`或`inline-grid`来创建网格容器；
 
-Jekyll also offers powerful support for code snippets:
+**display: grid**  
+默认行排列，宽度为容器的宽度；
+> 
+```
+.container{
+    display: grid;
+    border: 1px dashed gray;
+}
+```
+![图1-1.png](https://dn-mhke0kuv.qbox.me/46436c779bfefc255002.png)
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+**display: inline-grid** 
+> 
+```
+.container{
+    display: inline-grid;
+    border: 1px dashed gray;
+}
+```
+![图1-2.png](https://dn-mhke0kuv.qbox.me/7af0c237a1981dc4e378.png)
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+### 2.显式网格
+#### **grid-template-rows：**`none | <track-list> | <auto-track-list>`
+#### **grid-template-columns：**`none | <track-list> | <auto-track-list>`
+这两个属性差不多的，一个是行一个是列，我下面就以**`grid-template-columns`**来举例子；
+`where`
+**`<track-list>`** `= [ <line-names>? [ <track-size> | <track-repeat> ] ]+ <line-names>? `
+`where`
+**`<auto-track-list>`** `= [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>? <auto-repeat> [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+#### grid-template-columns: **`<track-list> → <track-size>`**
+`where`
+**`<track-size>`**` = <track-breadth> | minmax( <inflexible-breadth> , <track-breadth> ) | fit-content( [ <length> | <percentage> ] )`
+
+**2.1 示例：**（`<track-breadth>`）
+`where` 
+**`<track-breadth>`**` = <length-percentage> | <flex> | min-content | max-content | auto`
+`<flex>`：css数据类型，表示网格容器内的灵活长度（如1fr,1.5fr）;
+>```
+.container{
+  display: grid;
+  border: 1px dashed gray;
+  grid-template-columns: 200px 1fr 1fr;
+  //将容器分成3列，一列宽度为200px，然后将容器剩下的部分成2个部分,第二列和第三列各占1个部分
+}
+```
+![图2.1.png](https://dn-mhke0kuv.qbox.me/35b91a095e8c5dd79a65.png)
+
+**2.2 示例：**（`minmax( <inflexible-breadth> , <track-breadth> )`）
+设置最小和最大的列宽度
+`where`
+**`<inflexible-breadth>`**` = <length> | <percentage> | min-content | max-content | auto`
+>```
+.container{
+  display: grid;
+  border: 1px dashed gray;
+  grid-template-columns: minmax(200px,1fr) 1fr;
+  //将容器分成2列，第一列设置宽度最小为200px,最大为1fr
+}
+```
+![图2-2(1).png (宽度最大1fr时)](https://dn-mhke0kuv.qbox.me/e31cb1c3194295b213fb.png)
+![图2-2(2).png (宽度最小200px时)](https://dn-mhke0kuv.qbox.me/cc33e72f4a8ffef4f993.png)
+
+**2.3 示例：**（`fit-content( [ <length> | <percentage> ] )`）
+放一放，写了没看到效果；
+
+---
+
+#### grid-template-columns: **`<track-list> → <track-repeat>`**
+`where`
+**`<track-repeat>`**` = repeat( [ <positive-integer> ] , [ <line-names>? <track-size> ]+ <line-names>? )`
+
+**2.4 示例：**(`repeat( [ <positive-integer> ] , [ <line-names>? <track-size> ]+ <line-names>? )`)
+第一个参数：规定应重复的数量，也就是分成几列；
+第二个参数：规定分成的列的宽度；
+>```
+.container{
+  display: grid;
+  border:1px dashed gray;
+  grid-template-columns: repeat(3,1fr);
+}
+```
+![图2-4.png](https://dn-mhke0kuv.qbox.me/0466730c534b6be9b65b.png)
+
+---
+
+#### grid-template-columns: **`<auto-track-list>`**
+`where`
+**`<auto-track-list>`** `= [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>? <auto-repeat> [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`
+这样好难看，化解下，令`<fixed-list> = [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`，差不多就是：
+`where`
+**`<auto-track-list>`** `= <fixed-list> <auto-repeat> <fixed-list>`
+这样就清楚多了，哈哈；
+`where`
+**`<auto-repeat>`**` = repeat( [ auto-fill | auto-fit ] , [ <line-names>? <fixed-size> ]+ <line-names>? )`
+
+**2.5 示例：**（`grid-template-columns: <auto-track-list>`）
+>```
+.container{
+  display: grid;
+  border:1px dashed gray;
+  grid-template-columns: 1fr repeat(1, 100px) 2fr;
+}
+```
+![图2-5.png](https://dn-mhke0kuv.qbox.me/5ece73515282b28ab1bc.png)
+
+### 3.网格间隙
+#### **grid-gap:**`<'grid-row-gap'> <'grid-column-gap'>?`
+第一个参数：行的间隙
+第二个参数：列的间隙
+**3.1 示例：**
+>```
+.container{
+  display: grid;
+  border:1px dashed gray;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px 20px;
+}
+```
+![图3-1.png](https://dn-mhke0kuv.qbox.me/ff8ac94064a18baf5249.png)
+
+### 4.通过网格线号定位
+网格线本质上是表示列和行轨迹的开始，结束或之间的行。
+从轨道开始和网格方向开始的每一行从1开始递增编号。
+
+如图4-1.png，这个3x2网格可以生成4x3的网格线，里面的1,2,3,4,5,6块就根据这些网格线来进行定位；
+![图4-1.png (http://learncssgrid.com/)](https://dn-mhke0kuv.qbox.me/7549be22014a484eb985.png)
+
+#### **grid-row：**`<grid-line> [ / <grid-line> ]?`
+`where `
+**`<grid-line>`**` = auto | <custom-ident> | [ <integer> && <custom-ident>? ] | [ span && [ <integer> || <custom-ident> ] ]`
+#### **grid-column：**`<grid-line> [ / <grid-line> ]?`
+`where `
+**`<grid-line>`**` = auto | <custom-ident> | [ <integer> && <custom-ident>? ] | [ span && [ <integer> || <custom-ident> ] ]`
+
+**4.1 示例：**
+> ```
+.item {  
+    grid-row:2 / 3; 
+    //将元素放在行的第2条和第3条网格线之间
+    //列也是差不多的
+}```
+![图4-1.png](https://dn-mhke0kuv.qbox.me/a781faeded296e1c2b56.png)
+
+**还可以实现跨行或列**
+>```
+.item{
+    grid-column: 1 / 3;
+}
+```
+![图4-2.png](https://dn-mhke0kuv.qbox.me/67a4d6e4a17238fb540e.png)
+
+**还可以使用span来实现跨行或列**
+>```
+.container{
+    display: grid;
+    border: 1px dashed gray;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px 20px;
+    //asd
+}
+.item1{
+    grid-column: 1/span 3;
+    //列的第1条网格线开始，跨3列
+}
+.item2{
+  grid-row: 2/span 3;
+  grid-column: 2/span 2;
+  //等价于 grid-area: 2/ 2 / span 3 / span 2
+}
+```
+```
+<div class="container">
+    <div class="item1">1</div>
+    <div class="item2">2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+</div>
+```
+![图4-3.png](https://dn-mhke0kuv.qbox.me/82728deebe662e7c6b96.png)
+
+### 5.隐式网格
+
