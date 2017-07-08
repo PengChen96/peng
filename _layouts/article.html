@@ -19,8 +19,8 @@
 		<main class="mdl-layout__content">
 			
 			<div class="mdl-grid">
-				<div class="mdl-cell mdl-cell--3-col"></div>
-				<div class="mdl-cell mdl-cell--6-col">
+				<div class="mdl-cell mdl-cell--2-col"></div>
+				<div class="mdl-cell mdl-cell--8-col">
 					<h1>{{page.title}}</h1>
 					<p>{{page.author}} / {{page.date}}</p>
 					<button onclick="history.go(-1);">返回</button>
@@ -28,7 +28,7 @@
 
 					{{ content }}
 				</div>
-				<div class="mdl-cell mdl-cell--3-col"></div>
+				<div class="mdl-cell mdl-cell--2-col"></div>
 			</div>
 			<!-- 底部 -->
 			{% include footer.html %}
