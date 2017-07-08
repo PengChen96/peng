@@ -34,7 +34,7 @@
               <i class="material-icons" id="search_icon" style="color: #fff;">search</i>
             </label>
             <input type="text" class="search_text" id="search_text" style="color:#333;" onfocus="focus_search_style()" onblur="blur_search_style()" placeholder="搜索">
-            <label class="mdl-button mdl-js-button mdl-button--icon">
+            <label class="mdl-button mdl-js-button mdl-button--icon" onclick="clearText()">
               <i class="material-icons" id="clear_icon" style="color:#fff;">clear</i>
             </label>
         </div>
@@ -61,6 +61,7 @@
 <!-- </div> -->
 
 <script type="text/javascript">
+  //获得焦点
   function focus_search_style(){
     var search_sty = document.getElementById("search_sty");
     search_sty.style.backgroundColor = "#fff";
@@ -74,6 +75,7 @@
     var search_text = document.getElementById("search_text");
     search_text.style.color = "#333";
   }
+  //失去焦点
   function blur_search_style(){
     var search_sty = document.getElementById("search_sty");
     search_sty.style.backgroundColor = "#5c6cc0";
@@ -86,5 +88,12 @@
 
     var search_text = document.getElementById("search_text");
     search_text.style.color = "#ccd1eb";
+  }
+  //清除内容
+  function clearText(){
+    var search_text = document.getElementById("search_text");
+    search_text.value = "";
+    // 获取text焦点
+    search_text.focus();
   }
 </script>
