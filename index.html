@@ -2,52 +2,48 @@
 layout: Index
 category: blog
 ---
-<style type="text/css">
-	.pagination ul{
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-	}
-</style>
 
 <!-- 遍历分页后的文章 -->
 {% for post in paginator.posts %}
-    <!-- <div class="article_info">
-        <b><a class="article_title" href="/peng/{{ post.url }}">{{ post.title }}</a></b>
-        <p>author: {{ post.author }}</p>
-        <span class="article_date">{{ post.date }}</span>
-        <div class="article_img">
-            <img src="{{post.illustration}}" alt="图片">
-        </div>
-        <p class="article_description">{{ post.description }}</p>
-    </div> -->
-	<div class="mdl-grid">
-		<div class="mdl-cell mdl-cell--2-col"></div>
+    <!--<div class="article_info">-->
+        <!--<b><a class="article_title" href="/peng/{{ post.url }}">{{ post.title }}</a></b>-->
+        <!--<p>author: {{ post.author }}</p>-->
+        <!--<span class="article_date">{{ post.date }}</span>-->
+        <!--<div class="article_img">-->
+            <!--<img src="{{post.illustration}}" alt="图片">-->
+        <!--</div>-->
+        <!--<p class="article_description">{{ post.description }}</p>-->
+    <!--</div>-->
+	<article>
+		<a class="post-thumbnail" style="background-image: url('{{post.illustration}}')" href="#"></a>
+		<p class="article_description">{{ post.description }}</p>
+	</article>
+	<!--<div class="mdl-grid">-->
+		<!--<div class="mdl-cell mdl-cell&#45;&#45;2-col"></div>-->
 
-		<div class="mdl-cell mdl-cell--8-col">
-		    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-			  <div class="mdl-card__title" style="background: url('{{post.illustration}}') center / cover;height:300px;">
-			    <h2 class="mdl-card__title-text"><a href="/peng/{{ post.url }}">{{ post.title }}</a></h2>
-			  </div>
-			  <div class="mdl-card__supporting-text">
-			    {{ post.description }}
-			  </div>
-			  <div class="mdl-card__actions mdl-card--border">
-			    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/peng/{{ post.url }}">
-			      阅读全文
-			    </a>
-			  </div>
-			  <div class="mdl-card__menu">
-			    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-			      <i class="material-icons">share</i>
-			    </button>
-			  </div>
-			</div>
-		</div>
+		<!--<div class="mdl-cell mdl-cell&#45;&#45;8-col">-->
+		    <!--<div class="demo-card-wide mdl-card mdl-shadow&#45;&#45;2dp">-->
+			  <!--<div class="mdl-card__title" style="background: url('{{post.illustration}}') center / cover;height:300px;">-->
+			    <!--<h2 class="mdl-card__title-text"><a href="/peng/{{ post.url }}">{{ post.title }}</a></h2>-->
+			  <!--</div>-->
+			  <!--<div class="mdl-card__supporting-text">-->
+			    <!--{{ post.description }}-->
+			  <!--</div>-->
+			  <!--<div class="mdl-card__actions mdl-card&#45;&#45;border">-->
+			    <!--<a class="mdl-button mdl-button&#45;&#45;colored mdl-js-button mdl-js-ripple-effect" href="/peng/{{ post.url }}">-->
+			      <!--阅读全文-->
+			    <!--</a>-->
+			  <!--</div>-->
+			  <!--<div class="mdl-card__menu">-->
+			    <!--<button class="mdl-button mdl-button&#45;&#45;icon mdl-js-button mdl-js-ripple-effect">-->
+			      <!--<i class="material-icons">share</i>-->
+			    <!--</button>-->
+			  <!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
 
-		<div class="mdl-cell mdl-cell--2-col"></div>
-	</div>
+		<!--<div class="mdl-cell mdl-cell&#45;&#45;2-col"></div>-->
+	<!--</div>-->
 {% endfor %}
 
 <div class="mdl-grid">
