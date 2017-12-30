@@ -15,8 +15,13 @@ category: blog
         <!--<p class="article_description">{{ post.description }}</p>-->
     <!--</div>-->
 	<article class="article">
-		<a class="article-img" style="background-image: url('{{post.illustration}}')" href="#"></a>
-		<div class="article-content">{{ post.description }}</div>
+		<a class="article-img" style="background-image: url('{{post.illustration}}')" href="/peng/{{ post.url }}"></a>
+		<div class="article-content">
+			<h2 class="article-title"><a href="/peng/{{ post.url }}">Hello,你好!{{ post.title }}</a></h2>
+			<p>{{ post.description }}</p>
+			<span>2017, Sep 12&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+			<span>3 minute read</span>
+		</div>
 	</article>
 	<!--<div class="mdl-grid">-->
 		<!--<div class="mdl-cell mdl-cell&#45;&#45;2-col"></div>-->
