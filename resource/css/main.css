@@ -131,10 +131,22 @@ body {
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+  padding: 8px 0 0;
 }
 .container .sidebar footer .contact .icon-group img {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  -webkit-transition: all 0.3s ease;
+          transition: all 0.3s ease;
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+  opacity: 0.66;
+}
+.container .sidebar footer .contact .icon-group img:hover {
+  -webkit-filter: grayscale(0%);
+          filter: grayscale(0%);
+  opacity: 1;
 }
 .container .sidebar footer .copyright {
   text-align: center;
@@ -258,6 +270,12 @@ body {
     width: 100%;
     padding: 10px;
     box-shadow: 0 1px 1px 0 rgba(31, 35, 46, 0.15);
+  }
+  .container .sidebar footer .contact .contact-title {
+    display: none;
+  }
+  .container .sidebar footer .copyright {
+    display: none;
   }
   .container .blogBox {
     -webkit-box-orient: horizontal;
