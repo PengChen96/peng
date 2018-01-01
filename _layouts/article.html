@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{page.title}}</title>
+	<title>Peng 首页</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/x-icon" href="/peng/favicon.png">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-indigo.min.css" />
-	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-	<!-- markdown样式 -->
 	<link rel="stylesheet" href="/peng/resource/css/blog_md.css">
+	<link rel="stylesheet" href="/peng/resource/css/main.css">
 </head>
 <body>
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-		<!-- 头部 -->
-		{% include article_header.html %}
-		<!-- 内容 -->
-		<main class="mdl-layout__content">
-			
-			<div class="mdl-grid">
-				<div class="mdl-cell mdl-cell--2-col"></div>
-				<div class="mdl-cell mdl-cell--8-col">
-					<h1>{{page.title}}</h1>
-					<p>{{page.author}} / {{page.date}}</p>
-					<button onclick="history.go(-1);">返回</button>
-					<img src="{{page.illustration}}">
-					
-					{{ content }}
-				</div>
-				<div class="mdl-cell mdl-cell--2-col"></div>
-			</div>
-			<!-- 底部 -->
-			{% include footer.html %}
-		</main>
-	</div>
+<div class="container">
+	<!-- 头部 -->
+	<sidebar class="sidebar">
+		{% include sidebar.html %}
+	</sidebar>
+	<!-- 内容 -->
+	<blogBox class="blogBox">
+		<div class="contentBox">
+			<h1>{{page.title}}</h1>
+			<p>{{page.author}} / {{page.date}}</p>
+			<button onclick="history.go(-1);">返回</button>
+			<img src="{{page.illustration}}">
+			{{ content }}
+		</div>
+	</blogBox>
+	<!-- 底部 -->
+	<!--{% include footer.html %}-->
+</div>
 </body>
 </html>
+

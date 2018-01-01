@@ -3,6 +3,7 @@ layout: Index
 category: blog
 ---
 
+<div class="articleBox">
 <!-- 遍历分页后的文章 -->
 {% for post in paginator.posts %}
     <!--<div class="article_info">-->
@@ -50,44 +51,31 @@ category: blog
 		<!--<div class="mdl-cell mdl-cell&#45;&#45;2-col"></div>-->
 	<!--</div>-->
 {% endfor %}
+</div>
 
-<div class="mdl-grid">
-	<div class="mdl-cell mdl-cell--3-col"></div>
+<div class="paginationBox">
+	<!--{% if paginator.previous_page %}-->
+	<!--<a href="/peng/blog/page{{ paginator.previous_page }}/" class="previous">Previous</a>-->
+	<!--{% else %}-->
+	<!--<span class="previous">Previous</span>-->
+	<!--{% endif %}-->
 
-	<div class="mdl-cell mdl-cell--6-col">
-		<div class="pagination">
-		    <!--{% if paginator.previous_page %}-->
-		    <!--<a href="/peng/blog/page{{ paginator.previous_page }}/" class="previous">Previous</a>-->
-		    <!--{% else %}-->
-		    <!--<span class="previous">Previous</span>-->
-		    <!--{% endif %}-->
+	<!--<span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>-->
+	<!--{% if paginator.next_page %}-->
+	<!--<a href="/peng/blog/page{{ paginator.next_page }}/" class="next">Next</a>-->
+	<!--{% else %}-->
+	<!--<span class="next ">Next</span>-->
+	<!--{% endif %}-->
 
-		    <!--<span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>-->
-		    <!--{% if paginator.next_page %}-->
-		    <!--<a href="/peng/blog/page{{ paginator.next_page }}/" class="next">Next</a>-->
-		    <!--{% else %}-->
-		    <!--<span class="next ">Next</span>-->
-		    <!--{% endif %}-->
-
-		    <ul>
-		        {% for page in (1..paginator.total_pages) %}
-		        {% if page == paginator.page %}
-		        <li class="current">
-		        	<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" >
-		        		<a href="#" style="color:#fff;">{{ page}}</a>
-		        	</button>
-		        </li>
-		        {% else %}
-		        <li>
-		        	<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" >
-		        		<a style="display: block;" href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a>
-		        	</button>
-		        </li>
-		        {% endif %}
-		        {% endfor %}
-		    </ul>
-		</div>
+	{% for page in (1..paginator.total_pages) %}
+	{% if page == paginator.page %}
+	<div class="pageNum active">
+		<a href="#" >{{ page}}</a>
 	</div>
-
-	<div class="mdl-cell mdl-cell--3-col"></div>
+	{% else %}
+	<div class="pageNum">
+		<a href="/peng/{%if page > 1 %}blog/page{{ page }}/{% endif %}">{{ page }}</a>
+	</div>
+	{% endif %}
+	{% endfor %}
 </div>
