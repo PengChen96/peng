@@ -247,23 +247,29 @@ body {
   width: 100%;
 }
 .container .blogBox .paginationBox .pageNum {
-  width: 24px;
-  height: 24px;
-  margin-right: 4px;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
   text-align: center;
-  line-height: 24px;
-  border: 1px solid #ccc;
-  background: #eee;
+  line-height: 28px;
+  border-radius: 4px;
+  background: #ccc;
 }
 .container .blogBox .paginationBox .pageNum a {
   display: block;
   text-decoration: none;
   color: #333;
+  border-radius: 4px;
+}
+.container .blogBox .paginationBox .pageNum a:hover {
+  color: #fff;
+  background: #3385ff;
+  box-shadow: 1px 1px 10px 0 #333;
 }
 .container .blogBox .paginationBox .active a {
   color: #fff;
   background: #3385ff;
-  border: 1px solid #2d78f4;
+  box-shadow: 1px 1px 10px 0 #333;
 }
 .container .blogBox .contentBox {
   display: -webkit-box;
