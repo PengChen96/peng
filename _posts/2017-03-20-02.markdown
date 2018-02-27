@@ -1,17 +1,17 @@
 ---
 layout: article
-title:  "333"
+title:  "CSS揭秘整理之半透明边框"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/test03.jpg"
+illustration: "/peng/resource/images/css.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---
 
-***
+
 #### 1.半透明边框
 **问题:**
->如果我们要为一个容器设置红色背景和一道黑色半透明边框，我们可能会这样写:
+> 如果我们要为一个容器设置红色背景和一道黑色半透明边框，我们可能会这样写:
 ```
 border: 20px solid rgba(0,0,0,0.5);
 background: red;
@@ -21,8 +21,9 @@ background: red;
 
 ![图1-1.png](http://upload-images.jianshu.io/upload_images/5544126-5d3209b4731c165c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+
 **解决方案：**
->我们可以通过background-clip属性来调整上面的默认行为，把它是值设为padding-box,然后就出现了我们想要的效果（图1-2.png）；
+> 我们可以通过background-clip属性来调整上面的默认行为，把它是值设为padding-box,然后就出现了我们想要的效果（图1-2.png）；
 ```
 border: 20px solid rgba(0,0,0,0.5);
 background: red;
@@ -31,23 +32,23 @@ background-clip: padding-box;
 
 ![图1-2.png](http://upload-images.jianshu.io/upload_images/5544126-6f081ee0df74a92b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-***
 #### 2.background-clip
 *既然用到了background-clip属性，那我们就来看看这个属性吧;*
+
 **background-clip:** 
 设置元素的背景（背景图片或颜色）是否延伸到边框下面。
 
-值（values ）|  说明 
+值（values ）| 说明 
 ----|------
-`border-box` |  *默认初始值*，背景延伸到边框外沿（但是在边框之下）
-`padding-box` | 边框下面没有背景，即背景延伸到内边距外沿
-`content-box` | 背景裁剪到内容区 (content-box) 外沿
-`text` | *实验API*，背景裁剪到前景文本（ foreground text）内。
+`border-box` | *默认初始值*，背景延伸到边框外沿（但是在边框之下）
+`padding-box` |边框下面没有背景，即背景延伸到内边距外沿
+`content-box` |背景裁剪到内容区 (content-box) 外沿
+`text` |*实验API*，背景裁剪到前景文本（ foreground text）内。
 
 **示例**
->
-##### CSS content
-```
+
+>*CSS content*
+```css
 span {
    border: 10px blue;
    border-style: dotted double;
@@ -60,26 +61,22 @@ span {
 .content-box { background-clip: content-box; }
 .text { background-clip: text; }
 ```
-##### HTML content
-```
+*HTML content*
+```html
 <span class="border-box">border-box</span>
 <span class="padding-box">padding-box</span>
 <span class="content-box">content-box</span>
 <span class="text">text</span>
 ```
-
 效果：（图2-1.png）
-
 ![图2-1.png](http://upload-images.jianshu.io/upload_images/5544126-6b745a8809f748cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-***
 #### 3.border-style
 
 ![](http://upload-images.jianshu.io/upload_images/5544126-c5079cd150168edb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![](http://upload-images.jianshu.io/upload_images/5544126-ffc9ce9a03569fca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-***
 #### 4.border-image
 **初始值：**
 * `border-image-source: none`
@@ -91,11 +88,9 @@ span {
 **4.1 border-image-source: `none | <image>`**
 
 where
-
 `<image> = <url> | <image()> | <image-set()> | <element()> | <cross-fade()> | <gradient>`
 
 where
-
 `<image()> = image([ [ <image> | <string> ]? , <color>? ]!)`
 
 `<image-set()> = image-set(<image-set-option>#)`
@@ -111,9 +106,8 @@ where
 **Gradient示例：**
 
 `<linear-gradient()> = linear-gradient( [<angle> | to <side-or-corner>]?, <color-stop-list>)`
->
-CSS content
-```
+>CSS content
+```css
 .gradient { 
 	border: 30px solid;
 	border-image-source: linear-gradient(to right, red, green, blue);
@@ -122,22 +116,19 @@ CSS content
 	padding: 20px;
 }
 ```
-HTML content
-```
-<div class='gradient'>The image is stretched to fill the area.</div>
-```
-
 
 效果：（图4-1.png）
 
 ![图4-1.png](http://upload-images.jianshu.io/upload_images/5544126-5e2cab9cc2497888.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 **4.2 border-image-slice:`[ <number> | <percentage> ]{1,4}&& fill? `**
+
 这个`border-imge-slice`属性传入1~4个参数（number没有单位专指像素或百分比值）将图片分割成9个部分,1,2,3,4四个区块是不会拉伸,不会平铺，称之为盲区，5,6,7,8四个区块可以通过`border-image-repeat`来控制拉伸平铺和重复（`stretch:默认值,拉伸; repeat:平铺; round:整数次平铺;`），第9区块不显示，传入参数`fill`则显示第9区块，分割情况如下图（图4-2.png && 图4-3.png）:
 
 ![图4-2.png](http://upload-images.jianshu.io/upload_images/5544126-b51b3ed41881867e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![图4-3.png](http://upload-images.jianshu.io/upload_images/5544126-436bbba790b1e1a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 我们通过上面这张图片（81px^81px）来看传入不同个数的参数是如何分割这张图片的；
 
 **1个参数**
@@ -196,6 +187,7 @@ border-image-width: top right bottom left      /* Four-value syntax */
 E.g. border-image-width: 5% 2em 10% auto;
 ```
 设置边框图片的width，如果超出了设置的border-width,会向内扩展；查看下方示例，比较（图4-10.png && 图4-11.png）；
+
 **示例：**
 >```
 border: 30px solid transparent;
@@ -204,7 +196,8 @@ border-image-source: url("https://mdn.mozillademos.org/files/4127/border.png");
 border-image-slice: 27;
 ```
 ![图4-10.png](http://upload-images.jianshu.io/upload_images/5544126-abbb3714e5757137.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-```
+
+>```
 border: 30px solid transparent;
 padding: 20px;
 border-image-source:url([https://mdn.mozillademos.org/files/4127/border.png](https://mdn.mozillademos.org/files/4127/border.png));
@@ -236,7 +229,8 @@ border-image-outset: 7px 12px 14px 5px;
  margin: 60px;
 ```
 ![图4-12.png](http://upload-images.jianshu.io/upload_images/5544126-0e2de6db87f10c44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-```
+
+>```
 border: 30px solid transparent;
 padding: 20px;
 border-image-source:url([https://mdn.mozillademos.org/files/4127/border.png](https://mdn.mozillademos.org/files/4127/border.png));
@@ -246,7 +240,7 @@ border-image-outset: 2 1 1 1;
 ```
 ![图4-13.png](http://upload-images.jianshu.io/upload_images/5544126-2555f130068283e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-**4.4 border-image-repeat:`[ stretch | repeat | round ]{1,2}`**
+**4.5 border-image-repeat:`[ stretch | repeat | round ]{1,2}`**
 
 值（value）| 说明
 --|----
