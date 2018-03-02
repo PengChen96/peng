@@ -1,0 +1,251 @@
+---
+layout: article
+title:  "CSS揭秘之形状"
+author: "pengchen"
+date:   2017-05-22 09:51:24 +0800
+illustration: "/peng/resource/images/css.jpg"
+description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+categories: blog
+---
+
+### 一.自适应的椭圆
+**问题：**
+> 
+我们肯定都注意到过，我们给一个正方形元素添加一个足够大的`border-radius`（指定大于正方形元素边长一半的半径），就可以使其变成一个圆形(如图1-1.png)。
+>>示例：
+```
+width: 200px;
+height: 200px;
+backgrund: #FFC727;
+border-radius: 100px;
+```
+![图1-1.png](https://dn-mhke0kuv.qbox.me/5287987f713690275131.png)
+>
+规范还特别指出了其中的原因：
+>>“当任意两个相邻圆角的半径之和超过border box的尺寸时，用户代理必须按比例减小各个边框半径所使用的值，直到它们不会相互重叠为止。”
+>
+我们有时可能不愿意给一个元素设置固定的宽高，而是希望让元素能根据内容自己调整并适应。如果我们现在需要这样的效果：**如果元素的宽高相等，就显示为一个圆，如果不相等就显示为椭圆**。我们前面的代码并不能满足这样的效果，那我们应该怎么来产生一个椭圆呢？
+
+**解决方案：**
+> 其实就是一个你可能并不知道的真相，那就是`border-radius`它可以**单独指定水平半径和垂直半径，用（/）分隔两值即可**。这样我们就可以得到一个相对精确的椭圆（图1-2.png）。
+>> 示例：
+```
+width: 200px;
+height: 150px;
+background: #ffc727;
+border-radius: 100px / 75px;
+```
+![图1-2.png](https://dn-mhke0kuv.qbox.me/6a59d77be97562d1861a.png)
+>
+这样就得到了一椭圆，但是它元素的尺寸变化，`border-radius`值也需要改变，那也是有点麻烦的。那我们怎么办呢？
+其实呢，哈哈，那就是`border-radius`值是接收百分比值的；
+所以设置`border-radius: 50%;`就可以实现一个自适应的椭圆了；
+
+好吧，那我们就来看看`border-radius`吧。
+
+**1. border-radius:`<length-percentage>{1,4} [ / <length-percentage>{1,4} ]?`**
+`where `
+`<length-percentage> = <length> | <percentage>`
+
+ (1.1) *`border-radius` 用来设置边框圆角。当使用一个半径时确定一个圆形；当使用两个半径时确定一个椭圆，这个(椭)圆与边框的交集形成圆角效果。（图1-3.png）*
+
+![图1-3.png---来自MDN](https://dn-mhke0kuv.qbox.me/3426f1553eaec1ed3c63.png)
+ 
+(1.2)`border-radius`前一个语法取值可以取1~4个值,看下图（图1-4.png）就很清楚了,指定的是水平半径；
+后一个语法取值也可以取1~4个值（同前一个语法），指定的是垂直半径；
+
+![图1-4.png---来自css揭秘](https://dn-mhke0kuv.qbox.me/2f17e52d1054aad61a17.png)
+
+(1.3)看一些示例吧
+> 二分之一椭圆（图1-5.png）
+```
+width: 200px;
+height: 150px;
+background: #ffc727;
+border-radius: 50% /100% 100% 0 0;
+<!--border-top-left-radius: 50% 100%;-->
+<!--border-top-right-radius: 50% 100%;-->
+<!--border-bottom-right-radius: 50% 0px;-->
+<!--border-bottom-left-radius: 50% 0px;-->
+```
+![图1-5.png](https://dn-mhke0kuv.qbox.me/79d8b4284c91ed5f9f8d.png)
+
+---
+
+> 四分之一椭圆（图1-6.png）
+```
+width: 200px;
+height: 150px;
+background: #ffc727;
+border-radius: 100% 0 0 0;
+```
+![图1-6.png](https://dn-mhke0kuv.qbox.me/a603dbdce37f7842f746.png)
+
+---
+>随便加了点阴影（图1-7.png） 
+```
+width: 200px;
+height: 150px;
+background: #ffc727;
+border-radius: 50%/100% 0;
+box-shadow: 0px 10px 20px 0;
+```
+![图1-7.png](https://dn-mhke0kuv.qbox.me/e41db0d17fa821783415.png)
+
+### 二.平行四边形
+**问题：**
+> 我们可以通过skew()来对矩形进行拉伸来生成一个平行四边形（如图2-1.png）；
+
+![图2-1.png](https://dn-mhke0kuv.qbox.me/b80cfabc7f886a71c81c.png)
+
+平行四边形是生成了，但是里面的内容“hello”也进行了拉伸，这样就比较难阅读，也不好看。那么有什么办法只让形状拉伸，而保持内容不变呢？
+
+**解决方案：**
+> 我们可以把所有样式都应用到为元素上，然后对伪元素进行变形。因为我们的内容并不是包含在伪元素里，所以内容不会受到形变的影响。
+>> 示例：（图2-2.png）
+```
+.box{
+	margin: 100px;
+	width:100px;
+	height:40px;
+	position:relative;
+	text-align: center;
+	line-height:40px;
+	color: #fff;
+}
+.box::before{
+	content: "";
+	position: absolute;
+	top:0;
+	left: 0;
+	right:0;
+	bottom: 0;
+	background: #ffc727;
+	transform: skew(-45deg);
+	z-index:-1;
+}
+```
+![图2-2.png](https://dn-mhke0kuv.qbox.me/304e46a4ac23a8028981.png)
+
+### 三.菱形图片
+我们可以通过`clip-path`属性来快速实现菱形图片的效果,不过它现在还是一个实验中的功能，它的兼容性不是很好。
+
+**clip-path:**`<clip-source> | [ <basic-shape> || <geometry-box> ] | none`
+`where `
+`<clip-source> = <url>`
+`<basic-shape> = <inset()> | <circle()> | <ellipse()> | <polygon()>`
+`<geometry-box> = <shape-box> | fill-box | stroke-box | view-box`
+
+> 示例：(图3-1.png)
+```
+img{
+	clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
+}
+```
+![图3-1.png](https://dn-mhke0kuv.qbox.me/dc27240fb260cf2bb7c7.png)
+
+basic-shape有四种基本形状（`inset,cicle,ellipse,polygon`）,感觉好方便啊，那我们就一起来看看吧。
+
+（3.1）<**inset()**> ：定义一个插图矩形
+`where`
+`<inset()> = inset( <length-percentage>{1,4} [ round <border-radius> ]? )`
+inset()可以传入5个参数（第5个参数可选），分别对应`top,right,bottom,left,round radius`，我们看一下下面的示例（图3-2.png），就清楚了；
+>示例：（图3-2.png） 
+```
+clip-path: inset(10px 10px 50px 20px round 30px);
+```
+![图3-2.png](https://dn-mhke0kuv.qbox.me/66ab5794ccdd90f76de1.png)
+
+（3.2）<**circle()**>：圆
+`where`
+`<circle()> = circle( [ <shape-radius> ]? [ at <position> ]? )`
+circle()可以传人2个可选参数；
+第一个参数是圆的半径，默认为图片宽高中短的那个为直径；
+**注意：这个参数是支持百分比的，如果用百分比：
+圆的半径/百分比=sqrt(width^2+height^2)/sqrt(2)。**
+第二个参数是圆心位置，默认为图片中心。
+>示例：（图3-3.png）
+```
+clip-path: circle(30% at 150px 120px);
+```
+![图3-3.png](https://dn-mhke0kuv.qbox.me/1798d082236cb171fb96.png)
+
+圆的半径 = [sqrt（300^2+225^2）/sqrt(2)]*30% ≈ 80 px;
+
+（3.3）<**ellipse()**>：椭圆
+`where`
+`<ellipse()> = ellipse( [ <shape-radius>{2} ]? [ at <position> ]? )`
+ellipse()可以传入3个可选参数；
+前2个参数表示的分别是椭圆X轴半径和Y轴半径，默认是图片宽（高）的一半，支持百分比；
+第三个参数是椭圆中心位置，默认图片中心。
+>示例：（图3-4.png）
+```
+clip-path: ellipse(25% 25% at 50% 25%);
+```
+![图3-4.png](https://dn-mhke0kuv.qbox.me/c3e465a9bfe3d4085c4e.png)
+
+（3.4）<**polygon()**>：多边形
+`where`
+`<polygon()> = polygon( <fill-rule>? , [ <length-percentage> <length-percentage> ]# )`
+polygon()中前一个语法`<fill-rule>`表示填充规则用来确定该多边形的内部。可能的值有nonzero和evenodd,默认值是nonzero;
+后面列表中的每对参数表示多边形的顶点坐标（X,Y）;
+>示例：（图3-5.png）
+```
+clip-path: polygon(50% 0,100% 50%,0 100%);
+```
+![图3-5.png](https://dn-mhke0kuv.qbox.me/12fb518eaa9a9e2dfd59.png)
+
+**clip-path**这个属性还可以参与动画呢，只要我们使用的是同一种形状函数。
+>示例：（图3-6.png）
+```
+img{
+    clip-path: ellipse(75% 25%);
+	transition: 1s clip-path;
+}
+img:hover{
+	clip-path: ellipse(50% 50%);
+}
+```
+![图3-6.png](https://dn-mhke0kuv.qbox.me/d1bc242a985e88178133.gif)
+
+**四.切角效果**
+我这里用上面的clip-path来实现下，可以通过css渐变和border-image实现。
+（4.1）clip-path实现切角效果
+>示例：（图4-1.png）
+CSS
+>>```
+.box{
+	width:200px;
+	height:200px;
+	background: #FFc727;
+	clip-path: polygon(20px 0,calc(100% - 20px) 0,100% 20px,100% calc(100% - 20px),calc(100% - 20px) 100%,20px 100%,0 calc(100% - 20px),0 20px);
+}
+```
+>
+这样要改一切角，就要改好多地方，不是很方便,我们就用一下预处理器，我使用的是LESS，这样就稍稍好了一些，但也不够DRY。
+LESS
+>>```
+.corner(@radius){
+	@ca: e("calc(100% - @{radius})");
+	<!--@ca: calc(~"100% - @{radius}");-->
+	clip-path: polygon(@radius 0,@ca 0,100% @radius,100% @ca,@ca 100%,@radius 100%,0 @ca,0 @radius);
+}
+.box{
+	width:200px;
+	height:200px;
+	background: #FFc727;
+	.corner(20px);
+}
+```
+>
+![图4-1.png](https://dn-mhke0kuv.qbox.me/46ba7aad642e1774c699.png)
+
+未来，可能会引入一个新的属性`corner-shape`，配合`border-radius`使用，这样就可以快速实现一些切角的问题。
+
+[corner-shape介绍](http://lea.verou.me/2013/03/border-corner-shape-is-in-danger-and-you-can-help/)
+
+[corner-shape体验](http://leaverou.github.io/corner-shape/)
+
+---
+本内容根据《css揭秘》, MDN 和自己的理解进行整理；
+感谢您的阅读。

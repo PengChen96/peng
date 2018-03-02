@@ -1,0 +1,160 @@
+---
+layout: article
+title:  "CSS揭秘之多重边框&连续的图像边框"
+author: "pengchen"
+date:   2017-05-22 09:51:24 +0800
+illustration: "/peng/resource/images/css.jpg"
+description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+categories: blog
+---
+
+***
+### 1.多重边框
+我们可以通过使用`border-image`来写一个多重边框，或使用多个元素来模拟多重边框，不过我们有更好的办法来制作一个多重边框，那就是使用`box-shadow`的第四个参数（称为扩张半径）来完成一个多重边框的制作，肯定大家都已经非常熟悉`box-shadow`了，不过我还是来复习一下。
+
+**（1） box-shadow:**`none | <shadow>#`
+where
+`<shadow>= [inset? && [ <offset-x><offset-y><blur-radius>? <spread-radius>? <color>? ] ]#`
+
+值（values）| 说明
+-- | ----
+inset | 默认阴影在边框外，使用inset后，阴影在边框内；
+offset-x | 水平偏移量，负值将阴影放在元素左侧；
+offset-y | 垂直偏移量，负值将阴影放在元素上方；
+blur-radius | 默认0，不能为负值；值越大，模糊面积越大，阴影越大越淡；
+spread-radius |  默认0，正值阴影扩大，负值阴影收缩；
+color | 颜色，不设置则由浏览器决定；
+
+
+这里我们就用`spread-radius`来制作一个多重边框，`box-shadow`支持逗号分隔语法，来创建多个数量的投影；
+我们需要注意的是，`box-shadow`是层层重叠的，第一层投影位与最顶层，比如你想在下面示例（图1-1.png）外圈再加一道20px的黑色边框，你需要设置`spread-radius`的值为60px（40px+20px）；
+>**示例：**
+```
+background: red;
+box-shadow: 0 0 0 20px green,
+            0 0 0 40px blue;
+```
+
+效果：（图1-1.png）
+
+![图1-1.png](http://upload-images.jianshu.io/upload_images/5544126-6ecc67d93d3922df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+**注意：**
+`box-shadow`是不会影响布局的，也不会受到`box-sizing`的影响，这样制作出来的“假边框”也是不会响应鼠标事件的，比如点击；
+
+**（2）outline:**`[ <'outline-color'> || <'outline-style'> || <'outline-width'> ]`
+
+在某些情况下，你只需要两层边框，这是你可以通过常规边框，再加上`outline`来生成外层的边框。它比`box-shadow`（只能模拟实线边框）要灵活一些，还有一些别的边框样式，比如虚线边框；
+还有一点就是它可以通过`outline-offset`来控制它跟元素边缘的间距，这个属性接收负值；（图1-2.png）
+>**示例：**
+```
+ background: gray;
+ outline: 5px dashed #fff;
+ outline-offset: -10px;
+```
+
+效果：（图1-2.png）
+
+![图1-2.png](http://upload-images.jianshu.io/upload_images/5544126-7e145171a1abd483.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+**(3)边框内圆角**
+>**outline示例：**
+```
+background: red;
+outline: 10px solid green;
+border-radius: 20px;
+```
+
+**效果：**（图1-3.png`(outline)`）
+
+![图1-3.png`(outline)`](http://upload-images.jianshu.io/upload_images/5544126-5078af87774ee21c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们来看上面的这个例子（图1-3.png`(outline)`），我们发现`outline`是不贴合元素圆角的，并不是我们想要的效果；那我们有什么方法来解决这个问题，实现边框内圆角这个效果呢？
+我们先来看一下下面这个例子：
+>**box-shadow示例：**
+```
+background: red;
+border-radius: 20px;
+box-shadow: 0 0 0 20px blue;
+```
+
+**效果：**（图1-4.png`(box-shadow)`）
+
+![图1-4.png`(box-shadow)`.png](http://upload-images.jianshu.io/upload_images/5544126-a847d3ddd31e1c04.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们发现`outline`不贴合元素圆角，但`box-shadow`是贴合元素圆角的，那么想法就来了，把`outline`和`box-shadow`的边框颜色设置成一样不就实现这个效果了，哈哈，是不是有点黑科技的感觉；
+>**示例：**
+```
+outline: 10px solid green;
+border-radius: 20px;
+box-shadow: 0 0 0 10px blue;
+```
+**效果：**（图1-5.png && 图1-6.png）
+
+图1-5.png： `outline：green`，`box-shadow：blue`
+
+![图1-5.png](http://upload-images.jianshu.io/upload_images/5544126-5f144840a559af96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+图1-6.png： `outline：green`，`box-shadow：green`
+
+![图1-6.png](http://upload-images.jianshu.io/upload_images/5544126-c6b7644f20387e99.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+注意，我们给box-shadow设置的扩张半径并不一定等于描边的宽度，我们只需要刚好填充上图（图1-3.png）的白色区域就可以了，那么我们设置多大的扩张半径可以填补这个区域呢？
+哈哈，来初中的勾股定理要来了，看下图（图1-7.png）
+
+![图1-7.png（图片来自css揭秘）](http://upload-images.jianshu.io/upload_images/5544126-ab47cee7b13ab62f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+看图上就已经很清楚了，就不说了，所以要填补上图（图1-3.png）的白色区域，就只需要（√2-1）*r 约等于8.28427px就可以了；
+
+### 2.连续的图像边框
+**问题：**
+>+ 有时我们需要将一张图片应用为一个元素的边框，而不是背景；不仅如此，我还希望这张图片可以自动延伸并覆盖完整的边框区域，如下图(图2-1.png)效果；
+
+![图2-1.png](http://upload-images.jianshu.io/upload_images/5544126-33beade12125a584.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
++ 你肯定会想到用`border-image`，它的原理是“九宫格伸缩法”：把图片分割成九份，然后把它们应用到元素边框相应的边和角；
+关于它的工作原理，可以看我的上一篇文章[CSS揭秘整理之半透明边框](http://www.jianshu.com/p/d5b16170526c)；
++ 问题在于，我们并不想让图片的某个特定区域固定在拐角处，而是希望拐角处的图片区域能够随着元素的宽高和边框的厚度变化而变化，你只要稍微尝试一下，就会发现用`border-image`并不可能做得到；
+那我们应该怎么办呢？
+
+**解决方案：**
+>+ 最简单的解决方法就是使用两个元素，一个用来存放背景，一个用来存放内容，它需要一个额外的html元素，这显然是一个不太理想的方法；
++ 我们可以利用css渐变和背景扩展来完成完全一样的效果，**我们的主要思路：** *在背景图片之上，再叠加一层白色的背景，为了让下层的背景透过透明边框显示出来，我们给它设置不同的`background-clip`值*；
+**示例：**
+```
+padding: 30px;
+border:20px solid transparent;
+background: linear-gradient(white,white), url('http://p0.so.qhimgs1.com/bdr/326__/t0146c3062c8d78dce0.jpg');
+background-size: cover;
+background-clip: padding-box,border-box;
+background-origin: border-box;
+```
+
+**效果：**（图2-2.png）
+
+![图2-2.png](http://upload-images.jianshu.io/upload_images/5544126-2d76ba8a6675a58b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+#### 蚂蚁行军边框
+
+利用css渐变和背景的扩展 ，先给背景设置一层条纹背景，再在上面设置一层白色实色背景，然后需要给条纹背景设置一个合适的`background-size`值，最后将`background-position`以动画的方式改变为100%，这样就完成滚动了；(这里设置`background-size`还真的是有点麻烦啊，条纹换个角度就又要改一下才能无缝拼接，不知道有什么好的方法，望大神分享一下哦，嘻嘻)
+
+where
+`<repeating-linear-gradient()> = repeating-linear-gradient( [ <angle> | to <side-or-corner> ]? , <color-stop-list> )`
+>**示例：**
+```
+padding: 50px;
+border:20px solid transparent;
+background:linear-gradient(white,white) padding-box,repeating-linear-gradient(45deg,#fb3 25%,#58a 0,#58a 50%,#fb3 0 ,#fb3 75%,#58a 0) 0 / 40px 40px;
+/*background:linear-gradient(white,white) padding-box,repeating-linear-gradient(45deg,#fb3 25%,#58a 0,#58a 50%,#fb3 0 ,#fb3 75%,#58a 0);
+background-position: 0;
+background-size: 40px 40px;*/
+animation: ants 12s linear infinite;
+```
+
+**效果：**（图2-3.gif）
+
+![图2-3.gif](http://upload-images.jianshu.io/upload_images/5544126-456fd661655fdb81.gif?imageMogr2/auto-orient/strip)
+
+***
+本内容根据《css揭秘》, MDN 和自己的理解进行整理；
+感谢您的阅读。

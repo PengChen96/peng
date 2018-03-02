@@ -1,13 +1,14 @@
 ---
 layout: article
-title:  "222"
+title:  "CSS Grid 网格布局"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/test02.jpg"
+illustration: "/peng/resource/images/test03.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---
-Css Grid是一个强大的web二维布局工具，能够以行和列来进行布局；
+
+CSS Grid是一个强大的 web 二维布局工具，能够以行和列来进行布局；
 
 ### 1. 网格容器
 通过设置`display`的属性为`grid`或`inline-grid`来创建网格容器；
@@ -37,18 +38,23 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 #### **grid-template-rows：**`none | <track-list> | <auto-track-list>`
 #### **grid-template-columns：**`none | <track-list> | <auto-track-list>`
 这两个属性差不多的，一个是行一个是列，我下面就以**`grid-template-columns`**来举例子；
+
 `where`
 **`<track-list>`** `= [ <line-names>? [ <track-size> | <track-repeat> ] ]+ <line-names>? `
+
 `where`
 **`<auto-track-list>`** `= [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>? <auto-repeat> [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`
 
 #### grid-template-columns: **`<track-list> → <track-size>`**
+
 `where`
 **`<track-size>`**` = <track-breadth> | minmax( <inflexible-breadth> , <track-breadth> ) | fit-content( [ <length> | <percentage> ] )`
 
 **2.1 示例：**（`<track-breadth>`）
+
 `where` 
 **`<track-breadth>`**` = <length-percentage> | <flex> | min-content | max-content | auto`
+
 `<flex>`：css数据类型，表示网格容器内的灵活长度（如1fr,1.5fr）;
 >```
 .container{
@@ -61,7 +67,9 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 ![图2.1.png](https://dn-mhke0kuv.qbox.me/35b91a095e8c5dd79a65.png)
 
 **2.2 示例：**（`minmax( <inflexible-breadth> , <track-breadth> )`）
+
 设置最小和最大的列宽度
+
 `where`
 **`<inflexible-breadth>`**` = <length> | <percentage> | min-content | max-content | auto`
 >```
@@ -76,15 +84,37 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 ![图2-2(2).png (宽度最小200px时)](https://dn-mhke0kuv.qbox.me/cc33e72f4a8ffef4f993.png)
 
 **2.3 示例：**（`fit-content( [ <length> | <percentage> ] )`）
-放一放，写了没看到效果；
-
----
+```html
+<style type="text/css">
+	.container {
+	  display: grid;
+	  grid-template-columns: fit-content(300px) fit-content(300px) 1fr;
+	  grid-gap: 5px;
+	  width: 100%;
+	  background-color: #eee;
+	  padding: 10px;
+	}
+	.container > div {
+	  background-color: #ffc727;
+	  padding: 5px;
+	}
+</style>
+<div class="container">
+  <div>内容不足300px,适应内容的宽度</div>
+  <div>
+    我这里内容比较多,超过300px了，但是我不能比设置的最大宽度300px更宽了。
+  </div>
+  <div>我就要剩下的了</div>
+</div>
+```
+![图2-3.png](https://user-gold-cdn.xitu.io/2017/8/14/4f323c491a16324038e069df241dd8fd)
 
 #### grid-template-columns: **`<track-list> → <track-repeat>`**
 `where`
 **`<track-repeat>`**` = repeat( [ <positive-integer> ] , [ <line-names>? <track-size> ]+ <line-names>? )`
 
 **2.4 示例：**(`repeat( [ <positive-integer> ] , [ <line-names>? <track-size> ]+ <line-names>? )`)
+
 第一个参数：规定应重复的数量，也就是分成几列；
 第二个参数：规定分成的列的宽度；
 >```
@@ -100,16 +130,16 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 
 #### grid-template-columns: **`<auto-track-list>`**
 `where`
-**`<auto-track-list>`** `= [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>? <auto-repeat> [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`
-这样好难看，化解下，令`<fixed-list> = [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`，差不多就是：
+**`<auto-track-list>`**`= <fixed-list> <auto-repeat> <fixed-list>`
+
 `where`
-**`<auto-track-list>`** `= <fixed-list> <auto-repeat> <fixed-list>`
-这样就清楚多了，哈哈；
+**`<fixed-list>`**` = [ <line-names>? [ <fixed-size> | <fixed-repeat> ] ]* <line-names>?`
+
 `where`
 **`<auto-repeat>`**` = repeat( [ auto-fill | auto-fit ] , [ <line-names>? <fixed-size> ]+ <line-names>? )`
 
 **2.5 示例：**（`grid-template-columns: <auto-track-list>`）
->```
+>```css
 .container{
   display: grid;
   border:1px dashed gray;
@@ -123,7 +153,7 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 第一个参数：行的间隙
 第二个参数：列的间隙
 **3.1 示例：**
->```
+>```css
 .container{
   display: grid;
   border:1px dashed gray;
@@ -138,7 +168,7 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 从轨道开始和网格方向开始的每一行从1开始递增编号。
 
 如图4-1.png，这个3x2网格可以生成4x3的网格线，里面的1,2,3,4,5,6块就根据这些网格线来进行定位；
-![图4-1.png (http://learncssgrid.com/)](https://dn-mhke0kuv.qbox.me/7549be22014a484eb985.png)
+![图4-1.png](https://user-gold-cdn.xitu.io/2017/8/7/da86bfec06f2a52f2b45b8c553aab042)
 
 #### **grid-row：**`<grid-line> [ / <grid-line> ]?`
 `where `
@@ -148,16 +178,17 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 **`<grid-line>`**` = auto | <custom-ident> | [ <integer> && <custom-ident>? ] | [ span && [ <integer> || <custom-ident> ] ]`
 
 **4.1 示例：**
-> ```
+```css
 .item {  
     grid-row:2 / 3; 
     //将元素放在行的第2条和第3条网格线之间
     //列也是差不多的
-}```
+}
+```
 ![图4-1.png](https://dn-mhke0kuv.qbox.me/a781faeded296e1c2b56.png)
 
 **还可以实现跨行或列**
->```
+>```css
 .item{
     grid-column: 1 / 3;
 }
@@ -165,7 +196,7 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
 ![图4-2.png](https://dn-mhke0kuv.qbox.me/67a4d6e4a17238fb540e.png)
 
 **还可以使用span来实现跨行或列**
->```
+```css
 .container{
     display: grid;
     border: 1px dashed gray;
@@ -183,7 +214,7 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
   //等价于 grid-area: 2/ 2 / span 3 / span 2
 }
 ```
-```
+{% highlight ruby%}
 <div class="container">
     <div class="item1">1</div>
     <div class="item2">2</div>
@@ -191,8 +222,29 @@ Css Grid是一个强大的web二维布局工具，能够以行和列来进行布
     <div>4</div>
     <div>5</div>
 </div>
-```
+{% endhighlight %}
 ![图4-3.png](https://dn-mhke0kuv.qbox.me/82728deebe662e7c6b96.png)
 
 ### 5.隐式网格
+使用`grid-auto-rows, grid-auto-columns, grid-auto-flow `来设置隐式网格；
++ **grid-auto-rows：**`<track-size>+`   设置隐含创建的网格行的大小
++ **grid-auto-columns：**`<track-size>+`    设置隐含创建的网格列的大小轨道
++ **grid-auto-flow：**`<track-size>+`   设置隐含创建的网格的默认流方向
 
+>```css
+.container {
+  display: grid;
+  grid-gap:5px;
+  grid-template-rows: 70px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 140px;
+  grid-auto-flow: row;
+}
+```
+![图5-1.png](https://user-gold-cdn.xitu.io/2017/8/14/e731ccc84cd8a117dbebfaa4b75f6469)
+
+---
+<a href="http://learncssgrid.com/">CSS Grid</a>  
+<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout">MDN</a>
+
+感谢您的阅读

@@ -1,0 +1,340 @@
+---
+layout: article
+title:  "Python3 websocket通信"
+author: "pengchen"
+date:   2017-05-22 09:51:24 +0800
+illustration: "/peng/resource/images/test03.jpg"
+description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+categories: blog
+---
+
+### 一. 客户端服务端进行握手
+1.客户端向服务端发送握手包
+```
+GET ws://localhost:8000/ HTTP/1.1
+Host: localhost:8000
+Connection: Upgrade
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade: websocket
+Origin: http://localhost:63342
+Sec-WebSocket-Version: 13
+Accept-Encoding: gzip, deflate, sdch, br
+Accept-Language: zh-CN,zh;q=0.8
+Sec-WebSocket-Key: 60jj9YDlrvPB+DzLmVJzcg==
+Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
+```
+2.服务端进行回应,返回给客户端
+```
+HTTP/1.1 101 Switching Protocols
+Upgrade: WebSocket
+Connection: Upgrade
+Sec-WebSocket-Accept: Cx7gYudkmGmF8rMFP1W1HbLkWRA=
+```
+客户端发送握手请求，然后服务端返回正确的数据，经过客户端的确认完成握手，然后就可以进行通信了；
+这里客户端发送的`Sec-WebSocket-Key`是一个Base64&nbsp;encode的值，它是浏览器随机生成的，然后服务端通过这个值生成一个`Sec-WebSocket-Accept`;
+方法： `key+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'`，然后SHA-1加密，再进行base-64加密；
+下面是握手代码：
+```python
+HANDSHAKE_STR = (
+   "HTTP/1.1 101 Switching Protocols\r\n"
+   "Upgrade: WebSocket\r\n"
+   "Connection: Upgrade\r\n"
+   "Sec-WebSocket-Accept: %(token)s\r\n\r\n"
+)
+GUID_STR = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+def parseHeaders(self, msg):
+    # print(msg)
+    headers = {}
+    msg = str(msg, encoding="utf-8")
+    header, data = msg.split('\r\n\r\n', 1)
+    for x in header.split("\r\n")[1:]:
+        # 这里是 “:+space”
+        key, value = x.split(": ", 1)
+        headers[key] = value
+    return headers
+# 握手数据
+def handShakeData(self,c_req):
+    sec_key = self.parseHeaders(c_req)['Sec-WebSocket-Key']
+    key = sec_key.encode("ascii") + GUID_STR.encode("ascii")
+    accept_token = base64.b64encode(hashlib.sha1(key).digest()).decode("ascii")
+    s_res = HANDSHAKE_STR % {'token': accept_token}
+    return s_res
+```
+
+### 二. 进行通信
+大概就是握手完成后，客户端发送消息到服务端，然后服务端将消息发送到每个连接上的客户端；
+#### 数据交互协议
+```
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-------+-+-------------+-------------------------------+
+ |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+ |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+ |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+ | |1|2|3|       |K|             |                               |
+ +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+ |     Extended payload length continued, if payload len == 127  |
+ + - - - - - - - - - - - - - - - +-------------------------------+
+ |                               |Masking-key, if MASK set to 1  |
+ +-------------------------------+-------------------------------+
+ | Masking-key (continued)       |          Payload Data         |
+ +-------------------------------- - - - - - - - - - - - - - - - +
+ :                     Payload Data continued ...                :
+ + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+ |                     Payload Data continued ...                |
+ +---------------------------------------------------------------+
+```
+##### 第一个字节：
++ FIN：描述消息是否结束；占1bit；如果是1表示这是数据包的最后一帧，0则表示后续还有数据；
++ RSV1, RSV2, RSV3：扩展定义，默认0，各占1bit;
++ opcode：表示传输的数据包类型，占4bit,(15种情况)
+  - `0x0` 表示为附加数据
+  - `0x1` 表示为text类型数据
+  - `0x2` 表示binary类型数据
+  - `0x3~7` 暂未定义
+  - `0x8` 表示连接关闭
+  - `0x9` 表示ping类型数据
+  - `0xA` 表示pong类型数据
+  - `0xB~F` 暂未定义
+
+##### 第二个字节：
++ MASK：表示是否经过掩码处理；如果是1，表示经过掩码处理，Masking-key的数据为掩码密码
++ Payload length：
+  - 如果值为0~125，则就是payload的真实长度；（若MASK=1,则Masking-key为第3~6个字节）
+  - 如果值为126，则后面的2个字节（16bit）为payload的真实长度；（若MASK=1,则Masking-key为第5~8个字节）
+  - 如果值为127，则后面的8个字节（64bit）为payload的真实长度；（若MASK=1,则Masking-key为第11~14个字节）
+  
+#### 1. 将客户端发送的数据解析出真实的数据
+方法：将Payload Data数据的每一位x,与Masking-key的第i%4位进行异或运算，i是x在Payload Data中的索引；
+下面是解析的代码：
+```python
+def parseData(self,msg):
+    g_code_length = msg[1] & 127
+    if g_code_length == 126:
+        g_code_length = struct.unpack('!H', msg[2:4])[0]
+        masks = msg[4:8]
+        data = msg[8:]
+    elif g_code_length == 127:
+        g_code_length = struct.unpack('!Q', msg[2:10])[0]
+        masks = msg[10:14]
+        data = msg[14:]
+    else:
+        masks = msg[2:6]
+        data = msg[6:]
+
+    i = 0
+    raw_by = bytearray()
+    for d in data:
+        raw_by.append( int(d) ^ int(masks[i % 4]) )
+        i += 1
+    print(u"总长度是：%d" % int(g_code_length))
+    raw_str = raw_by.decode()
+    return raw_str
+```
+#### 2. 将数据发送到客户端
+发送的数据格式：固定字节+包长度字节+原始数据
+例：`\x81\x0cHello World!`
+
+三. 完整的代码
+服务端：
+```python
+import socket
+import base64,hashlib
+import threading
+import struct
+from collections import deque
+
+HANDSHAKE_STR = (
+   "HTTP/1.1 101 Switching Protocols\r\n"
+   "Upgrade: WebSocket\r\n"
+   "Connection: Upgrade\r\n"
+   "Sec-WebSocket-Accept: %(token)s\r\n\r\n"
+)
+GUID_STR = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+STREAM = 0x0
+TEXT = 0x1
+BINARY = 0x2
+CLOSE = 0x8
+PING = 0x9
+PONG = 0xA
+
+
+class WebSocket(threading.Thread):
+    def __init__(self,conn,addr,index):
+        threading.Thread.__init__(self)
+        self.index = index
+        self.conn = conn
+        self.addr = addr
+        #发送的数据缓存
+        self.buffer = bytearray()
+        self.sendToClientData = deque()
+
+    # 组装header 获取‘Sec-WebSocket-Key’
+    def parseHeaders(self, msg):
+        # print(msg)
+        headers = {}
+        msg = str(msg, encoding="utf-8")
+        header, data = msg.split('\r\n\r\n', 1)
+        for x in header.split("\r\n")[1:]:
+            # 这里是 “:+space”
+            key, value = x.split(": ", 1)
+            headers[key] = value
+        return headers
+    # 握手数据
+    def handShakeData(self,c_req):
+        sec_key = self.parseHeaders(c_req)['Sec-WebSocket-Key']
+        key = sec_key.encode("ascii") + GUID_STR.encode("ascii")
+        accept_token = base64.b64encode(hashlib.sha1(key).digest()).decode("ascii")
+        s_res = HANDSHAKE_STR % {'token': accept_token}
+        return s_res
+    # 得到数据长度 （包含描述字节）
+    def getMsglen(self,msg):
+        g_code_length = msg[1] & 127
+        if g_code_length == 126:
+            g_code_length = struct.unpack('!H', msg[2:4])[0]
+            g_code_length += 8
+        elif g_code_length == 127:
+            g_code_length = struct.unpack('!Q', msg[2:10])[0]
+            g_code_length += 14
+        else:
+            g_code_length += 6
+        g_code_length = int(g_code_length)
+        print(g_code_length)
+        return g_code_length
+    # 解析数据
+    def parseData(self,msg):
+        g_code_length = msg[1] & 127
+        if g_code_length == 126:
+            g_code_length = struct.unpack('!H', msg[2:4])[0]
+            masks = msg[4:8]
+            data = msg[8:]
+        elif g_code_length == 127:
+            g_code_length = struct.unpack('!Q', msg[2:10])[0]
+            masks = msg[10:14]
+            data = msg[14:]
+        else:
+            masks = msg[2:6]
+            data = msg[6:]
+
+        i = 0
+        raw_by = bytearray()
+        for d in data:
+            raw_by.append( int(d) ^ int(masks[i % 4]) )
+            i += 1
+        print(raw_by)
+        print(u"总长度是：%d" % int(g_code_length))
+        raw_str = raw_by.decode()
+        # raw_str = str(raw_by)
+        return raw_str
+    # 发送消息
+    def sendMessage(self,message):
+        # 遍历连接上的列表
+        for conn in connections.values():
+            # 发送消息到client （除了自己）
+            if conn != self.conn:
+                self._sendMessage(False,TEXT,message)
+                while self.sendToClientData:
+                    data = self.sendToClientData.popleft()
+                    conn.send(data[1])
+
+    # FIN 后面是否还有数据；opcode 传输的数据包类型；message 传输的数据(str)
+    def _sendMessage(self,FIN,opcode,message):
+        payload = bytearray()
+        b1 = 0
+        b2 = 0
+        if FIN is False:
+            b1 |= 0x80
+        b1 |= opcode        # 若opcode=TEXT    b'0x81'
+
+        payload.append(b1)      #
+        msg_utf = message.encode('utf-8')
+        msg_len = len(msg_utf)
+
+        if msg_len <= 125:
+            b2 |= msg_len
+
+            payload.append(b2)
+        elif msg_len >= 126 and msg_len <= 65535:
+            b2 |= 126
+            payload.append(b2)
+            payload.extend(struct.pack("!H", msg_len))
+        elif msg_len <= (2 ^ 64 - 1):
+            b2 |= 127
+            payload.append(b2)
+            payload.extend(struct.pack("!Q", msg_len))
+        else:
+            print("传输的数据太长了! ——(_sendMessage)")
+        # 拼接上需要发送的数据
+        # 格式大概这样：bytearray(b'\x81\x0cHello World!')   '\x0c'是发送的数据长度
+        if msg_len > 0:
+            payload.extend(msg_utf)
+
+        self.sendToClientData.append((opcode,payload))
+
+    # 端开连接
+    def _disConnected(self):
+        self.conn.close()
+        print("断开的连接conn%s" % (self.index))
+        print(connections)
+        del connections['conn%s' % (self.index)]
+        print(connections)
+    # 
+    def run(self):
+        # print(self.listeners)
+        self.isHandShake = False
+        while True:
+            if self.isHandShake == False:
+                print("start handshake %s" % (self.addr[0]))
+                # 接收客户端内容
+                c_req = self.conn.recv(1024)
+                # print(c_req)
+                handData = self.handShakeData(c_req)
+                self.conn.sendall(str.encode(handData))
+                self.isHandShake = True
+            else:
+                message = self.conn.recv(16384)    # 16 * 1024   16384   # bytes
+                print(message)
+                # 断开连接
+                if message[0]&127 == CLOSE:    # 0x88   136
+                    self._disConnected()
+                    return
+                self.buffer.extend(message)  # bytes
+                code_length = self.getMsglen(self.buffer)  # 数据中带的 数据长度（包含描述字节）
+                # 数据完整就发送
+                if code_length == len(self.buffer):
+                    buffer_utf = self.parseData(self.buffer)      # str
+                    self.sendMessage(buffer_utf)
+                    print(message)
+                    self.buffer = bytearray()
+
+connections = {}
+class websocketServer(object):
+    def __init__(self,host, port):
+        self.serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.serversocket.bind((host, port))
+        self.serversocket.listen(5)
+
+    def server(self):
+        print(self.serversocket)
+        index =0
+        while True:
+            conn,addr = self.serversocket.accept()
+            print(conn)
+            print(addr)
+            # 新建线程
+            newSocket = WebSocket(conn,addr,index)
+            # 开始线程,执行run函数
+            newSocket.start()
+            connections['conn%s'% (index)] = conn
+            index += 1
+            print(connections)
+
+
+websocketServer = websocketServer("127.0.0.1",8000)
+websocketServer.server()
+```
+
+---
+感谢您的阅读；
