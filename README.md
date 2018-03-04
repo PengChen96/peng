@@ -25,4 +25,15 @@ $  ruby dk.rb install
 
 ~/myblog $ jekyll serve
 
+// ~ $ bundle exec jekyll serve
+
  Now browse to http://localhost:4000
+
+
+ if error :
+
+ ~ $ gem install bundler
+
+ ~ $ bundle install
+
+
