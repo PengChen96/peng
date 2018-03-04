@@ -3,7 +3,7 @@ layout: article
 title:  "CSS Grid 网格布局"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/test03.jpg"
+illustration: "/resource/images/test03.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---

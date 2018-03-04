@@ -3,7 +3,7 @@ layout: article
 title:  "CSS揭秘之多重边框&连续的图像边框"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/css.jpg"
+illustration: "/resource/images/css.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---
@@ -120,6 +120,7 @@ box-shadow: 0 0 0 10px blue;
 **解决方案：**
 >+ 最简单的解决方法就是使用两个元素，一个用来存放背景，一个用来存放内容，它需要一个额外的html元素，这显然是一个不太理想的方法；
 + 我们可以利用css渐变和背景扩展来完成完全一样的效果，**我们的主要思路：** *在背景图片之上，再叠加一层白色的背景，为了让下层的背景透过透明边框显示出来，我们给它设置不同的`background-clip`值*；
+
 **示例：**
 ```
 padding: 30px;
