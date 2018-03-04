@@ -3,7 +3,7 @@ layout: article
 title:  "CSS揭秘之多重边框&连续的图像边框"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/css.jpg"
+illustration: "/resource/images/css.jpg"
 description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
 categories: blog
 ---
