@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="396ce5db-7b17-4dfe-b1e8-1f7f64f0f8f8" name="Default" comment="save">
+    <list default="true" id="396ce5db-7b17-4dfe-b1e8-1f7f64f0f8f8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Gemfile.lock" afterPath="$PROJECT_DIR$/Gemfile.lock" />
-      <change beforePath="$PROJECT_DIR$/resource/css/blog_md.css" afterPath="$PROJECT_DIR$/resource/css/blog_md.css" />
+      <change beforePath="$PROJECT_DIR$/resource/css/main.css" afterPath="$PROJECT_DIR$/resource/css/main.css" />
+      <change beforePath="$PROJECT_DIR$/resource/less/main.less" afterPath="$PROJECT_DIR$/resource/less/main.less" />
     </list>
     <ignored path="peng.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,21 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.less" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.less" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resource/less/main.less">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="177" column="9" lean-forward="false" selection-start-line="177" selection-start-column="9" selection-end-line="177" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="blog_md.css" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resource/css/blog_md.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="108" column="33" lean-forward="false" selection-start-line="108" selection-start-column="33" selection-end-line="108" selection-end-column="33" />
+            <state relative-caret-position="317">
+              <caret line="224" column="1" lean-forward="true" selection-start-line="224" selection-start-column="1" selection-end-line="224" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -71,6 +61,11 @@
         <option value="HTML File" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>blockquote</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -95,7 +90,6 @@
         <option value="$PROJECT_DIR$/resource/less/index.less" />
         <option value="$PROJECT_DIR$/_layouts/Index.html" />
         <option value="$PROJECT_DIR$/resource/css/main.css" />
-        <option value="$PROJECT_DIR$/resource/less/main.less" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/_posts/2017-03-19-01.markdown" />
         <option value="$PROJECT_DIR$/_layouts/article.html" />
@@ -107,6 +101,7 @@
         <option value="$PROJECT_DIR$/_posts/2017-05-25-06.markdown" />
         <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/resource/css/blog_md.css" />
+        <option value="$PROJECT_DIR$/resource/less/main.less" />
       </list>
     </option>
   </component>
@@ -261,7 +256,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1489888508441</updated>
-      <workItem from="1520140222804" duration="313000" />
+      <workItem from="1520140222804" duration="1016000" />
     </task>
     <task id="LOCAL-00001" summary="page btn">
       <created>1519652779774</created>
@@ -284,11 +279,18 @@
       <option name="project" value="LOCAL" />
       <updated>1519743656112</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="blog_md blockquote">
+      <created>1520140565808</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1520140565808</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="313000" />
+    <option name="totallyTimeSpent" value="1016000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -334,7 +336,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="page btn" />
     <MESSAGE value="save" />
-    <option name="LAST_COMMIT_MESSAGE" value="save" />
+    <MESSAGE value="blog_md blockquote" />
+    <option name="LAST_COMMIT_MESSAGE" value="blog_md blockquote" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -602,18 +605,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resource/less/main.less">
+    <entry file="file://$PROJECT_DIR$/resource/css/blog_md.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="177" column="9" lean-forward="false" selection-start-line="177" selection-start-column="9" selection-end-line="177" selection-end-column="9" />
+        <state relative-caret-position="431">
+          <caret line="115" column="28" lean-forward="false" selection-start-line="115" selection-start-column="28" selection-end-line="115" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resource/css/blog_md.css">
+    <entry file="file://$PROJECT_DIR$/resource/less/main.less">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="108" column="33" lean-forward="false" selection-start-line="108" selection-start-column="33" selection-end-line="108" selection-end-column="33" />
+        <state relative-caret-position="317">
+          <caret line="224" column="1" lean-forward="true" selection-start-line="224" selection-start-column="1" selection-end-line="224" selection-end-column="1" />
           <folding />
         </state>
       </provider>
