@@ -1,14 +1,17 @@
 ---
 layout: article
-title:  "444"
+title:  "ES6 笔记一"
 author: "pengchen"
-date:   2017-05-22 09:51:24 +0800
-illustration: "/peng/resource/images/test03.jpg"
-description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+date:   2017-07-19 09:51:24 +0800
+illustration: "http://www.cssxt.com/uploadfile/2017/0705/20170705105116854.jpeg"
+description: 'ES6 学习笔记一'
 categories: blog
 ---
-
-**markdown**
+{% highlight javascript%}
+  function hello(){
+    alert("hello ES6");
+  }
+{% endhighlight%}
 ```
 function a(){
 	
