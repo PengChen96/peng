@@ -1,9 +1,9 @@
 ---
 layout: article
-title:  "数字图像算法——256色转灰度图 JavaScript实现"
+title:  "数字图像算法—256色转灰度图 JavaScript实现"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/resource/images/test01.jpg"
+illustration: "/resource/images/js.jpg"
 description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光在此处为最高亮度，亮度级别是255。'
 categories: blog
 ---
