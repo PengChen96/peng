@@ -1,0 +1,27 @@
+---
+layout: article
+title:  "hello World!"
+author: "pengchen"
+date:   2014-09-01
+illustration: "/resource/images/hello.jpg"
+description: 'hello world! 很高兴遇到你！'
+categories: blog
+---
+```ruby
+def print_hi(name)
+  puts "Hi, #{name}"
+end
+print_hi('Tom')
+#=> prints 'Hi, Tom' to STDOUT.
+```
+
+
+
+{% highlight ruby linenos %}
+def print_hi(name)
+  puts "Hi, #{name}"
+end
+print_hi('Tom')
+#=> prints 'Hi, Tom' to STDOUT.
+{% endhighlight %}
+![图1-1.png](https://dn-mhke0kuv.qbox.me/40465cda2792b7df1231.png)

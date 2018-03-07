@@ -4,7 +4,7 @@ title:  "CSS揭秘之形状"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
 illustration: "/resource/images/css.jpg"
-description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+description: "我们肯定都注意到过，我们给一个正方形元素添加一个足够大的`border-radius`（指定大于正方形元素边长一半的半径），就可以使其变成一个圆形，那么我们如何来实现一个自适应的椭圆？"
 categories: blog
 ---
 
@@ -209,7 +209,9 @@ img:hover{
 ![图3-6.png](https://dn-mhke0kuv.qbox.me/d1bc242a985e88178133.gif)
 
 **四.切角效果**
+
 我这里用上面的clip-path来实现下，可以通过css渐变和border-image实现。
+
 （4.1）clip-path实现切角效果
 >示例：（图4-1.png）
 CSS

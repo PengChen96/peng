@@ -4,7 +4,7 @@ title:  "CSS揭秘之多重边框&连续的图像边框"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
 illustration: "/resource/images/css.jpg"
-description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+description: "我们可以通过使用`border-image`来写一个多重边框，或使用多个元素来模拟多重边框，不过我们有更好的办法来制作一个多重边框，那就是使用`box-shadow`的第四个参数（称为扩张半径）来制作..."
 categories: blog
 ---
 

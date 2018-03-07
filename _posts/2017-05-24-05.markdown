@@ -3,8 +3,8 @@ layout: article
 title:  "Python3 websocket通信"
 author: "pengchen"
 date:   2017-05-22 09:51:24 +0800
-illustration: "/resource/images/test03.jpg"
-description: "You’ll find this post in your You’ll find this post in your You’ll find this post in your `_posts` directory directory directory"
+illustration: "/resource/images/python.jpg"
+description: "WebSocket协议是基于TCP的一种新的网络协议。它实现了浏览器与服务器全双工(full-duplex)通信——允许服务器主动发送信息给客户端。"
 categories: blog
 ---
 

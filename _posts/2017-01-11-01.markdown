@@ -2,24 +2,31 @@
 layout: article
 title:  "数字图像算法—256色转灰度图 JavaScript实现"
 author: "pengchen"
-date:   2017-05-22 09:51:24 +0800
+date:   2017-01-11
 illustration: "/resource/images/js.jpg"
-description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光在此处为最高亮度，亮度级别是255。'
+description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光...'
 categories: blog
 ---
 
-#### 一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光在此处为最高亮度，亮度级别是255。
+一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光在此处为最高亮度，亮度级别是255。
 
-#### 灰度化方法：
-1.浮点算法：Gray = R*0.299 + G*0.587 + B*0.114  
-2.整数方法：Gray = (R*299 + G*587 + B*114 + 500) / 1000　  
-3.移位方法：Gray =(R*28+G*151+B*77)>>8; 　　  
-4.平均值法：Gray=（R+G+B）/3; 　　  
-5.仅取绿色：Gray=G；  
-**只要将原来的RGB(R,G,B)中的R,G,B统一用Gray替换，形成新的RGB(Gray,Gray,Gray)就完成灰度化了**
+灰度化方法：
++ 1.浮点算法：Gray = R*0.299 + G*0.587 + B*0.114　　
++ 2.整数方法：Gray = (R*299 + G*587 + B*114 + 500) / 1000　
++ 3.移位方法：Gray = (R*28+G*151+B*77)>>8　　
++ 4.平均值法：Gray = (R+G+B)/3　
++ 5.仅取绿色：Gray = G
+
+只要将原来的RGB(R,G,B)中的R,G,B统一用Gray替换，形成新的RGB(Gray,Gray,Gray)就完成灰度化了
+
+效果图：
 
 
-{% highlight html%}
+![数字图像算法——256色转灰度图 JavaScript实现](https://cdn.files.qdfuns.com/article/content/picture/201701/12/110919oitwztbbg8i440i8.png)
+
+**html 代码**
+
+```html
 <!DOCTYPE html>
 <html>
 	<head>
@@ -117,10 +124,7 @@ categories: blog
 		</script>
 	</body>
 </html>
-{% endhighlight %}
+```
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+---
+感谢您的阅读

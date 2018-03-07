@@ -1,0 +1,129 @@
+---
+layout: article
+title:  "数字图像算法—图像模糊化 JavaScript实现"
+author: "pengchen"
+date:   2017-01-12
+illustration: "/resource/images/js.jpg"
+description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光...'
+categories: blog
+---
+
+一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光在此处为最高亮度，亮度级别是255。
+
+模糊化方法：
+       就是将一个像素点的R（G，B）和它周围像素点的R（G，B）取出,然后取平均值再赋给这个像素点的R（G，B）;这样就完成模糊化了；
+例：
+       1	2	3
+       4	5	6
+       7	8	9
+       比如这个像素点5，把5像素点和周围的8个像素点（1,2,3,4,6,7,8,9）的R(G,B)取出,取这9个点的平均值然后赋给5像素点
+       R(5) = (R1+R2+R3+R4+R5+R6+R7+R8+R9)/9;
+       G(5) = (G1+G2+G3+G4+G5+G6+G7+G8+G9)/9;
+       B(5) = (B1+B2+B3+B4+B5+B6+B7+B8+B9)/9;
+效果图：
+
+
+![数字图像算法——图像模糊化 JavaScript实现](https://cdn.files.qdfuns.com/article/content/picture/201701/12/182900n59yy97tm7alt59l.png)
+
+**html 代码**
+
+```html:
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>ImgBase</title>
+		<style type="text/css">
+			.scream{
+				width:400px;
+				height:300px;
+				position: absolute;
+				top:60px;
+				border: 1px solid;
+			}
+			#canvas{
+				position: absolute;
+				top:60px;
+				left:500px;
+				border: 1px dashed;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="file" onchange="loadImg()"/>
+		<input type="button" value="模糊化" onclick="Fuzzy()"/>
+		<br/><br/>
+		<div class="scream">
+			<img id="scream" width="400px" height="300px" alt="Image preview...">
+		</div>
+		<canvas id="canvas" width="400px;" height="300px;">
+			your browser does not support canvas!
+		</canvas>
+		
+		<script>
+			function Fuzzy(){
+				var c=document.getElementById("canvas");
+			    var ctx=c.getContext("2d");
+			    var imgData=ctx.getImageData(0,0,c.width,c.height);
+			    var img_w = imgData.width;
+			    var img_h = imgData.height;
+			  
+			    for(var w=1;w<(img_w-1);w++){
+			    	for(var h=1;h<(img_h-1);h++){
+			    		//起始点
+			    		var i = (w+img_w*h)*4;
+			    		var R = imgData.data[i-1604]+imgData.data[i-1600]+imgData.data[i-1596]+imgData.data[i-4]+imgData.data[i]
+			    		+imgData.data[i+4]+imgData.data[i+1596]+imgData.data[i+1600]+imgData.data[i+1604];	//R(0-255)
+				    	var G = imgData.data[i-1603]+imgData.data[i-1599]+imgData.data[i-1595]+imgData.data[i-3]+imgData.data[i+1]
+			    		+imgData.data[i+5]+imgData.data[i+1597]+imgData.data[i+1601]+imgData.data[i+1605];	//G(0-255)
+				    	var B = imgData.data[i-1602]+imgData.data[i-1598]+imgData.data[i-1594]+imgData.data[i-2]+imgData.data[i+2]
+			    		+imgData.data[i+6]+imgData.data[i+1598]+imgData.data[i+1602]+imgData.data[i+1606];;	//G(0-255)
+				    	var Alpha = imgData.data[i+3];	//Alpha(0-255)
+		    	
+				    	imgData.data[i] = R/9;
+				        imgData.data[i+1] = G/9;	
+				        imgData.data[i+2] = B/9;	
+				        imgData.data[i+3] = Alpha;	
+			    	}
+			    }
+			    ctx.putImageData(imgData,0,0);
+			}
+		</script>
+		<script>
+			//canvas图像的宽高 
+			var c_w = 400; var c_h = 300;
+			//加载img图像
+			function loadImg(){
+				var img = document.getElementById("scream");
+				var file    = document.querySelector('input[type=file]').files[0];
+				if(!/image\/\w+/.test(file.type)){
+			        alert("文件必须为图片！");
+			        return false;
+			    }
+				var reader  = new FileReader();
+				reader.addEventListener("load", function () {
+				    img.src = reader.result;
+				}, false);
+				
+				if(file) {
+					reader.readAsDataURL(file);
+					loadCanvas();
+				}
+			}
+			//加载canvas图像
+			function loadCanvas(){
+				var c=document.getElementById("canvas");
+				var ctx=c.getContext("2d");
+				
+				var img = document.getElementById("scream");
+				img.onload = function() {
+					ctx.drawImage(img,0,0,c_w,c_h);
+				} 
+			}
+		</script>
+	</body>
+</html>
+```
+
+---
+感谢您的阅读
