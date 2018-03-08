@@ -10,6 +10,23 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
 	<link rel="stylesheet" href="/resource/css/blog_md.css">
 	<link rel="stylesheet" href="/resource/css/main.css">
+    <style>
+        .line{
+            width:100%;
+			height:16px;
+            border-top: 1px solid #bbb;
+        }
+		.article-title::before{
+			content: '原创';
+			position: relative;
+			margin-right: 4px;
+			padding: 0 2px;
+			font-size: 12px;
+			color: #bbb;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+		}
+    </style>
 </head>
 <body>
 <div class="container">
@@ -21,9 +38,11 @@
 	<blogBox class="blogBox">
 		<div class="contentBox">
 			<h1>{{page.title}}</h1>
-			<p>{{page.author}} / {{page.date}}</p>
+			<p class="article-title" style="margin:0;line-height:32px;color:#aaa;">
+				{{page.author}}&nbsp;&nbsp;&nbsp;&nbsp;{{ page.date| date: "%Y, %B %d" }}<!--{{page.date}} -->
+			</p>
 			<!--<button onclick="history.go(-1);">返回</button>-->
-            <br><hr><br>
+            <div class="line"></div>
 			<!--<img src="{{page.illustration}}">-->
 			{{ content }}
 		</div>
