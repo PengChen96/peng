@@ -208,6 +208,16 @@ body {
   text-decoration: none;
   color: #263959;
 }
+.container .blogBox .articleBox .article .article-content .article-title::before {
+  content: '原创';
+  position: relative;
+  margin-right: 4px;
+  padding: 0 2px;
+  font-size: 12px;
+  color: #bbb;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
 .container .blogBox .articleBox .article .article-content p {
   margin-top: 0;
   line-height: 24px;
