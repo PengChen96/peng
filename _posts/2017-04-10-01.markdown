@@ -2,7 +2,7 @@
 layout: article
 title:  "CSS揭秘之半透明边框"
 author: "pengchen"
-date:   2017-05-22
+date:   2017-04-10
 illustration: "/resource/images/css.jpg"
 description: "相信你以前肯定尝试过CSS中的半透明颜色，比如rgba()和hsla()。半透明颜色是2009年发生的一场重大变革。从那以后，我们终于可以在网页设计中使用它们了，但是为了尝鲜还需要付出额外的代价。"
 categories: blog

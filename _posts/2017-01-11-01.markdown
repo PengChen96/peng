@@ -3,7 +3,7 @@ layout: article
 title:  "数字图像算法——256色转灰度图"
 author: "pengchen"
 date:   2017-01-11
-illustration: "/resource/images/js.jpg"
+illustration: "/resource/images/coverImg/20170111.png"
 description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光...'
 categories: blog
 ---
@@ -22,7 +22,7 @@ categories: blog
 效果图：
 
 
-![数字图像算法——256色转灰度图 JavaScript实现](https://cdn.files.qdfuns.com/article/content/picture/201701/12/110919oitwztbbg8i440i8.png)
+![数字图像算法——256色转灰度图 JavaScript实现](/resource/images/coverImg/20170111.png)
 
 **html 代码**
 
