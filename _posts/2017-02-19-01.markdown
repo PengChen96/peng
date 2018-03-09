@@ -1,0 +1,154 @@
+---
+layout: article
+title:  "JS之事件绑定，事件冒泡与事件捕获"
+author: "pengchen"
+date:   2017-02-19
+illustration: "/resource/images/img/20170219.jpg"
+description: 'JS之事件绑定，事件冒泡与事件捕获'
+categories: blog
+---
+
+**（一）事件绑定**
+
+**1.普通事件绑定**
+
+给html添加一个以on开头的特定的属性（如onclick，onfocus）;
+
+```html
+<button id="A" onclick="alert(this.id)">方式一</button>
+```
+
+```html
+<button id="A" onclick="handler(this)">方式二</button>
+<script>
+    function handler(btn){
+        alert(this.id);  //undefined   this指向window对象
+        alert(btn.id);   //A
+    }
+</script>
+```
+
+```html
+<button id="A">方式三</button>
+<script>
+    var btn = document.getElementById("A");
+    btn.onclick = function(){
+        alert("1:"+this.id);
+    }
+    btn.onclick = function(){
+        alert("2:"+this.id);
+    }
+    //只能绑定一个事件处理函数，后面的会覆盖前面的；
+</script>
+```
+
+
+**2.符合W3C标准的事件绑定（addEventListener和removeEventListener）**
+
+target.addEventListener(type, listener[, useCapture]);
+    type:必须，表示监听事件类型的字符串；
+    listener:必须，当所监听的事件类型触发时，会接收到一个事件通知对象；listener 必须是一个实现了 EventListener 接口的对象，或者是一个函数；
+    useCapture:可选，Boolean,默认为false，表示事件传播方式为事件冒泡；true,表示事件传播方式为事件捕获；
+   （事件捕获与事件冒泡下面有讲到）
+这两个函数Firefox和Chrome都支持，IE9及以后也支持这两个函数；IE使用attachEvent/detachEvent来进行事件绑定和取消；
+
+
+```html
+<button id="B">W3C标准一</button>
+<script>
+    var btn = document.getElementById("B");
+    btn.addEventListener("click",handler,false);
+    function handler(){
+        alert(this.id);  //B this指向的是dom对象；  attachEvent指向的是window对象
+    }
+</script>
+```
+
+```html
+<button id="B">W3C标准二</button>
+<script>
+    var btn = document.getElementById("B");
+    btn.addEventListener("click",handler,true);
+    btn.addEventListener("click",handler,false);
+    function handler(){
+        alert(this.id);  //B
+    }
+    //当点击按钮时，函数handler会执行2次，一次为事件捕获，一次为事件冒泡；
+    //如果绑定的是同一个事件处理函数，且都是事件捕获或都是事件冒泡，那么只能绑定一次；
+</script>
+```
+
+
+**3.IE浏览器使用attachEvent/detachEvent进行事件绑定与取消**
+
+```html
+<button id="C">IE</button>
+<script>
+    var btn = document.getElementById("C");
+    btn.attachEvent("click",handler);
+    function handler(){
+        alert(this.id);  //undifined   this指向的是window对象；  addEventListener指向的是dom对象
+    }
+</script>
+```
+
+注：同一个事件处理函数只能绑定一次；不同的函数对象可以重复绑定不会覆盖；匿名函数和匿名函数即使代码完全一样，也是互相不相同的；
+
+**（二）事件捕获与事件冒泡**
+
+```html
+<div id="A">
+	<div id="B">
+		<div id="C"></div>
+	</div>
+</div>
+```
+
+
+**事件捕获**：就是从最外层到目标对象的顺序触发（如上面的代码，如果点击C，它的触发顺序为A→B→C）
+
+**事件冒泡**：就是从目标对象到外层的顺序触发（如果点击C,它的触发顺序为C→B→A）
+
+**DOM事件流**：就是支持两种事件模型，捕获型事件和冒泡型事件，捕获型事件先发生；两种事件流会触及DOM中的所有对象，从document对象开始，也在document对象结束。
+
+
+![JS之事件绑定，事件冒泡与事件捕获](/resource/images/img/20170219.jpg)
+
+```html
+<div id="A" style="width:300px; height:300px; background:red;position:relative;">
+     <div id="B" style="width:200px;height:200px; background:green;position:relative;top:50px;margin:auto;">
+         <div id="C" style="width:100px;height:100px; background:blue;position:relative;top:50px;margin:auto;"></div>
+     </div>
+</div>
+<script>
+ var A = document.getElementById("A");
+ var B = document.getElementById("B");
+ var C = document.getElementById("C");
+ // 目标（目标阶段的处理函数，先注册先执行）
+ C.addEventListener('click',function(){alert("Ct");},true);
+ C.addEventListener('click',function(){alert("Cf");},false);
+ // 事件冒泡
+ A.addEventListener('click',function(){alert("Af");},false);
+ B.addEventListener('click',function(){alert("Bf");},false);
+ // 事件捕获
+ A.addEventListener('click',function(){alert("At");},true);
+ B.addEventListener('click',function(){alert("Bt");},true);
+</script>
+//当点击C时（蓝色），输出At Bt Ct Cf Bf Af
+```
+
+
+**阻止事件的传播**：
+
+• 在W3c中，使用stopPropagation（）方法
+
+• 在IE下设置cancelBubble = true；
+
+**阻止事件的默认行为**：
+
+• 在W3c中，使用preventDefault（）方法；
+
+• 在IE下设置window.event.returnValue = false;
+
+---
+感谢您的阅读

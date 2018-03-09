@@ -1,0 +1,89 @@
+---
+layout: article
+title:  "python3基础学习笔记01"
+author: "pengchen"
+date:   2017-01-14
+illustration: "/resource/images/python.jpg"
+description: '学习Python3的一些笔记。'
+categories: blog
+---
+**1.编码**
++    Python3 默认UTF-8;
+
+**2.标识符**
++    2.1 第一个字符必须是字母表中字母或下划线“_”；
++    2.2 标识符的其他部分由字母，数字，下划线组成；
++    2.3 标识符对大小写敏感；
+
+*注：在Python 3中，非-ASCII 标识符也是允许的了;*
+
+**3.保留字**
+
+    > > > import keyword
+    > > > keyword.kwlist
+    ['False', 'None', 'True', 'and', 'as', 'assert', 'break', 'class', 'continue', 'def',
+    'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import',
+    'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
+
+**4.注释**
++    单行注释    #单行注释
++    多行注释    """多行注释""" 或 '''多行注释'''
+
+**5.行与缩进**
++    Python是使用缩进来表示代码块的，不需要使用大括号({})；
++    缩进的空格输是可变的，但是同一个代码块的语句必须包含相同的缩进空格输；
+
+**6.多行语句**
++    Python可以使用反斜杠(\)来实现多行语句；
++    例：
++    total = one + \
++            two + \
++            three
++    在 [], {}, 或 () 中的多行语句，不需要使用反斜杠(\)；
++    例：
++    total = ['one',
++            'two',
++            'three']
+
+**7.数据类型**
++    Python有4种数据类型
++        整数：如1；
++        长整数：比较大的整数；
++        浮点数：如1.11，3E-2；
++        复数：如 1 + 2j、 1.1 + 2.2j；
+
+**8.字符串**
++    Python中单引号和双引号用法完全相同
++    使用三引号( ''' 或 """ )可以指定一个多行字符串
++    转义符 '\'
++    自然字符串， 通过在字符串前加r或R。 如 r"this is a line with \n" 则\n会显示，并不是换行
++    python允许处理unicode字符串，加前缀u或U， 如 u"this is an unicode string"
++    字符串是不可变的
++    按字面意义级联字符串，如"this " "is " "string"会被自动转换为this is string
+
+**9.空行**
++    函数之间或类的方法之间用空行分隔，表示一段新的代码的开始。类和函数入口之间也用一行空行分隔，以突出函数入口的开始
+
+*注：空行与代码缩进不同，空行并不是Python语法的一部分,空行也是程序代码的部分*
+
+**10.等待用户输入**
++    执行下面的程序在按回车键后就会等待用户输入
++    input("\n\n按下 enter 键后退出。")
+
+**11.同一行显示多条语句**
++    Python可以在同一行中使用多条语句，语句之间使用分号(;)分割
++    import sys; x = 'runoob'; sys.stdout.write(x + '\n')
+
+**12.多个语句构成代码组**
++    缩进相同的一组语句构成一个代码块，我们称之代码组
++    像if、while、def和class这样的复合语句，首行以关键字开始，以冒号( : )结束，该行之后的一行或多行代码构成代码组
++    我们将首行及后面的代码组称为一个子句(clause)
++    if expression :
++       suite
++    elif expression :
++       suite
++    else :
++       suite
+
+---
+感谢您的阅读

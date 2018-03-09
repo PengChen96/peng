@@ -1,0 +1,227 @@
+---
+layout: article
+title:  "python3基础学习笔记02"
+author: "pengchen"
+date:   2017-01-17
+illustration: "/resource/images/python.jpg"
+description: '学习Python3的一些笔记--数据类型'
+categories: blog
+---
+
+**1.基本数据类型**
+
+    Python中变量不需要声明，每个变量在使用前必须赋值，变量赋值后该变量才会被创建；
+    Python中变量就是变量，它没有类型，我们所说的“类型”是变量所指的内存中对象的类型；
+    Python允许同时多个变量赋值；
+        例：a = b = c = 1;
+        (创建一个整型对象，值为1，三个变量被分配到相同的内存空间上)
+    也可以为多个对象指定多个变量；
+        例：a,b,c = 1,2,"hello"
+
+**2.Python中六个标准数据类型**
+
+    Number(数字)
+    String(字符串)    exa = "abcdef"
+    List(列表)        exa = ['a','b',1,1.1]
+    Tuple(元组)       exa = ('a',2.2)
+    Sets(集合)        exa = {'a','b'}
+    Dictionary(字典)
+
+**Number(数字)**
+
+    Python3支持int,float,bool,complex(复数)
+    (Python3中只有一种整数类型int,表示为长整型，没有Python2中的Long)
+    内置的type()函数可以用来查询变量所指的对象类型；
+    例：
+    >>> a,b,c,d = 10,1.1,True,4+3j;
+    >>> print(type(a),type(b),type(c),type(d));
+    <class 'int'> <class 'float'> <class 'bool'> <class 'complex'>
+
+    # 注：
+    Python2中没有布尔型，它用数字0表示False,用1表示True;
+    Python3中把True和False定义成关键字了，但它们的值还是1和0，可以和数字相加；[/color]
+
+    当你指定一个值时，Number对象就会被创建；
+    例：var1 = 1;
+    可以用del语句删除一些对象引用；
+    例：
+    >>> a,b,c,d = 10,1.1,True,4+3j;
+    >>> print(a);
+    >>> del a;
+    >>> print(a);   //NameError: name 'a' is not defined
+
+    数值运算
+        >>> 2/4   //除法，得到一个浮点数
+        0.5
+        >>> 2//4  //除法，得到一个整数
+        0
+        >>>2**5   //乘方
+        32
+       [color=#ff0000] 注：混合计算时，Python会把整型转换成为浮点数；[/color]
+
+    Python还支持复数，复数由实数部分和虚数部分构成，可以用a + bj,或者complex(a,b)表示， 复数的实部a和虚部b都是浮点型
+    例：
+    >>> a,b = 1j,4+3j;
+    >>> print(a+b);     //(4+4j)
+
+**String(字符串)**
+
+    Python中的字符串用单引号(')或双引号(")括起来，同时使用反斜杠(\)转义特殊字符。
+
+    字符串截取语法格式：
+    变量[头下标：尾下标]
+
+    索引值以 0 为开始值，-1 为从末尾的开始位置；
+    加号 (+) 是字符串的连接符；
+    星号 (*) 表示复制当前字符串，紧跟的数字为复制的次数；
+    例：
+    str = 'ABCDEFG'
+    print (str)          # 输出字符串 ABCDEFG
+    print (str[0:-1])    # 输出第一个个到倒数第二个的所有字符 ABCDEF
+    print (str[0])       # 输出字符串第一个字符   A
+    print (str[2:5])     # 输出从第三个开始到第五个的字符  CDE
+    print (str[2:])      # 输出从第三个开始的后的所有字符  CDEFG
+    print (str * 2)      # 输出字符串两次  ABCDEFGABCDEFG
+    print (str + "hello") # 连接字符串   ABCDEFhello
+
+    Python中的字符串有两种索引方式，从左往右以0开始，从右往左以-1开始
+    例:
+    >>> word = 'Python'
+    >>> print(word[0], word[5])
+    P n
+    >>> print(word[-1], word[-6])
+    n P
+
+    Python 使用反斜杠(\)转义特殊字符，如果你不想让反斜杠发生转义，可以在字符串前面添加一个 r，表示原始字符串;
+    例：
+    print("ABC\nDEF");  //ABC
+                                      DEF
+    print(r"ABC\nDEF"); //ABC\nDEF
+
+    # 注：Python中的字符串不能改变
+
+**List(列表)**
+
+    列表是写在方括号([])之间，用逗号分隔开的元素列表；
+    列表和字符串一样可以被索引和截取，截取后返回一个新列表；
+    例：
+    list = [ 'ABC', 123 , 1.1, 'def', 2.2 ]
+
+    tinylist = [456, 'def']
+
+    print (list)            # 输出完整列表
+                            //['ABC', 123, 1.1, 'def', 2.2]
+
+    print (list[0])         # 输出列表第一个元素
+                            //ABC
+    print (list[1:3])       # 从第二个开始输出到第三个元素
+                            //[123, 1.1]
+
+    print (list[2:])        # 输出从第三个元素开始的所有元素
+                            //[1.1, 'def', 2.2]
+
+    print (tinylist * 2)    # 输出两次列表
+                            //[456, 'def', 456, 'def']
+
+    print (list + tinylist) # 连接列表
+                        //['ABC', 123, 1.1, 'def', 2.2, 456, 'def']
+
+    [color=#ff0000]注：列表中的元素是可以改变的；[/color]
+
+**Tuple(元组)**
+
+    元组（tuple）与列表类似，不同之处在于元组的元素不能修改。元组写在小括号(())里，元素之间用逗号隔开。
+
+    元组与字符串类似，可以被索引且下标索引从0开始，-1 为从末尾开始的位置。也可以进行截取；
+    可以把字符串看作一种特殊的元组；
+
+    [color=#ff0000]注：string、list和tuple都属于sequence（序列）；[/color]
+
+**Set(集合)**
+
+    集合（set）是一个无序不重复元素的序列；
+    基本功能是进行成员关系测试和删除重复元素；
+
+    可以使用大括号({})或者 set()函数创建集合；
+    # 注：
+    创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典;
+
+    例：
+    set = {'a','a','b','c'}
+    print(set)          //{'b', 'c', 'a'}
+    #成员测试
+    if('c' in set) :
+        print('c 在集合中')
+    else :
+        print('c 不在集合中')
+
+    集合运算：
+        a = {'a','b','c'}
+        b = {'a','b','d'}
+        print(a-b)      # a和b的差集 {'c'}
+        print(a|b)      # a和b的并集 {'b', 'd', 'a', 'c'}
+        print(a&b)      # a和b的交集 {'b', 'a'}
+        print(a^b)      # a和b中不同时存在的元素 {'c', 'd'}
+
+**Dictionary(字典)**
+
+    字典是一种映射类型，是一个无序的键(key) : 值(value)对集合；
+    列表是有序的对象集合
+    例：
+    dict = {'a': 'a','b':1.1, 'c': 'c'}
+    print(dict['a'])        //a
+    print(dict.keys())      //dict_keys(['a', 'b', 'c'])
+    print(dict.values())    //dict_values(['a', 1.1, 'c'])
+
+**3.Python数据类型转换**
+
+    int(x [,base])
+    将x转换为一个整数
+
+    float(x)
+    将x转换到一个浮点数
+
+    complex(real [,imag])
+    创建一个复数
+
+    str(x)
+    将对象 x 转换为字符串
+
+    repr(x)
+    将对象 x 转换为表达式字符串
+
+    eval(str)
+    用来计算在字符串中的有效Python表达式,并返回一个对象
+
+    tuple(s)
+    将序列 s 转换为一个元组
+
+    list(s)
+    将序列 s 转换为一个列表
+
+    set(s)
+    转换为可变集合
+
+    dict(d)
+    创建一个字典。d 必须是一个序列 (key,value)元组。
+
+    frozenset(s)
+    转换为不可变集合
+
+    chr(x)
+    将一个整数转换为一个字符
+
+    unichr(x)
+    将一个整数转换为Unicode字符
+
+    ord(x)
+    将一个字符转换为它的整数值
+
+    hex(x)
+    将一个整数转换为一个十六进制字符串
+
+    oct(x)
+    将一个整数转换为一个八进制字符串
+
+---
+感谢您的阅读

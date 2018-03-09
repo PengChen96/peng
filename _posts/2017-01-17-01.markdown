@@ -1,0 +1,104 @@
+---
+layout: article
+title:  "Three.js制作3D正方形"
+author: "pengchen"
+date:   2017-01-17
+illustration: "/resource/images/threejs.jpg"
+description: '学习three.js写的一个demo,仅做记录。'
+categories: blog
+---
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>a_threeJS_one</title>
+    <style>
+        #canvas{
+            width:1100px;
+            height:600px;
+            background:palevioletred;
+            border:1px solid;
+        }
+    </style>
+    <!--步骤
+    1.设置three.js渲染器
+    2.设置场景scene
+    3.设置物体object
+    4.设置摄像机camera
+    5.设置光源light
+    -->
+    <script type="text/javascript" src="https://threejs.org/build/three.js"></script>
+    <script>
+//        渲染器
+        var renderer;
+        function init_Three_renderer(){
+            width = document.getElementById("canvas").clientWidth;
+            height = document.getElementById("canvas").clientHeight;
+            renderer = new THREE.WebGLRenderer({    //生成渲染对象
+                antialias : true    //去锯齿
+            });
+            renderer.setSize(width,height);//设置渲染的宽度和高度；
+            document.getElementById("canvas").appendChild(renderer.domElement);
+            renderer.setClearColor(0xEEEEEE,1);//设置渲染的颜色；
+        }
+//        场景
+        var scene;
+        function init_Three_scene(){
+            scene = new THREE.Scene();
+        }
+//        物体
+        var cube;
+        function init_Three_object(){
+            var geometry = new THREE.CubeGeometry(20, 20, 20);   //几何体 （长，宽，高）
+//            var texture = THREE.ImageUtils.loadTexture("b.jpg",null,function(t){});//添加纹理
+//            var material = new THREE.MeshLambertMaterial({color:0x00ff00,map:texture});
+            var material = new THREE.MeshLambertMaterial({color:0x00ff00});   //表面有光泽的材质类型
+            cube = new THREE.Mesh(geometry,material);
+//            cube.position.set(0,0,0);      //设置几何体的位置（x,y,z）
+            scene.add(cube);
+        }
+//        相机
+        var camera;
+        function init_Three_camera(){
+            camera = new THREE.PerspectiveCamera(50,width/height,1,5000);   //透视相机
+            // （可视角度，可视范围的长宽比，相对于深度剪切面的近的距离 必须为正数，相对于深度剪切面的远的距离 必须为正数）
+            camera.position.x = 20
+            camera.position.y = 20;
+            camera.position.z = 50;
+
+            camera.up.x = 0;//设置相机的上为「x」轴方向
+            camera.up.y = 1;//设置相机的上为「y」轴方向
+            camera.up.z = 0;//设置相机的上为「z」轴方向
+            camera.lookAt({x:0,y:0,z:0}); //设置视野的中心坐标
+        }
+//        光源
+        var light;
+        function init_Three_light(){
+            light = new THREE.DirectionalLight(0xffffff,1);//设置平行光源 (光颜色，光强度)
+            light.position.set(10,30,20);//设置光源向量 (x,y,z)
+            scene.add(light);
+        }
+        function ThreeJs_Main(){
+            init_Three_renderer();//渲染
+            init_Three_scene();//场景
+            init_Three_object();//物体
+            init_Three_camera();//相机
+            init_Three_light();//光源
+            variation();    //动画循环
+        }
+        function variation(){
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            renderer.clear();
+            renderer.render(scene,camera);
+            requestAnimationFrame(variation);
+        }
+    </script>
+</head>
+<body onload="ThreeJs_Main()">
+    <div id="canvas"></div>
+</body>
+</html>
+```
