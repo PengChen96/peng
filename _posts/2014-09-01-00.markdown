@@ -8,20 +8,17 @@ description: 'hello world! 很高兴遇到你！'
 categories: blog
 ---
 ```ruby
-def print_hi(name)
-  puts "Hi, #{name}"
+def print_hi()
+  puts "Hi, world!"
 end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
+print_hi('pc')
 ```
 
 
 
 {% highlight ruby linenos %}
-def print_hi(name)
-  puts "Hi, #{name}"
+def print_hi()
+  puts "Hi, world!"
 end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
+print_hi('pc')
 {% endhighlight %}
-![图1-1.png](https://dn-mhke0kuv.qbox.me/40465cda2792b7df1231.png)
