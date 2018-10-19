@@ -61,6 +61,33 @@ body{
         }
       }
     }
+    content {
+      //background: red;
+      height: 60%;
+      .tags-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        .tag {
+          margin: 4px;
+          padding: 0px 4px;
+          border-radius: 4px;
+          border: 1px solid #aaa;
+          color: #aaa;
+          text-decoration: none;
+          cursor: pointer;
+          transition: color 0.5s, border-color 0.5s;
+        }
+        .tag:hover {
+          color: #666;
+          border-color: #666;
+        }
+      }
+      .img-container {
+        width: 128px;
+        height: 128px;
+      }
+    }
     footer{
       .contact{
         .contact-title{
