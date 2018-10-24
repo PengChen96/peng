@@ -38,3 +38,7 @@ exclude:
 paginate: 6
 paginate_path: "blog/page:num"
 
+leancloud:
+  enable: true
+  app_id: vzEtHxsQkRdnpTTTx7PLhdcJ-gzGzoHsz
+  app_key: uSl7Ugz6JQJ08Whlp7ngyFm6
