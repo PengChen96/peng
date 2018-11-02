@@ -3,7 +3,7 @@ layout: article
 title:  "CSS Grid 网格布局"
 author: "pengchen"
 date:   2017-08-14
-illustration: "/resource/images/css.jpg"
+illustration: "/resource/images/cover/css03.jpg"
 description: "CSS Grid是一个强大的 web 二维布局工具，能够以行和列来进行布局。"
 categories: blog
 ---
