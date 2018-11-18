@@ -19,6 +19,7 @@ categories: tags
 1. [node 控制台输出颜色](/code-snippet/node-color.html) 
 2. [event preventDefault浏览器默认行为](/code-snippet/event-prevent-default.html)  
 3. [if/else判断的优雅写法](/code-snippet/js-complex-judge.html)  
+4. [格式化json数据](/code-snippet/json-format.html)  
 
 ### 小工具
 1. [前端mock数据脚手架](https://github.com/PengChen96/ap-cli)  
