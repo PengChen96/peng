@@ -64,7 +64,7 @@ json模板格式查看[完整模板及说明](#完整模板及说明)
 1. #### 通过js方式模拟数据
 格式查看[完整模板及说明](#完整模板及说明)
 ##### data.js
-```javascript
+```
 const getUserList = () => {
   const data = {
     "summary": "获取用户列表(get方式)",
@@ -86,10 +86,12 @@ module.exports = {
   getUserList
 };
 ```
+
 ##### 运行
 ```
 $ ap-cli -m data.js
 ```
+
 ##### 查看接口
 http://localhost:3000/api/get/userList
 
