@@ -111,12 +111,13 @@ $ ap-cli -m all -r /^a/
 ```
 
 ## CLI用法
-|#|缩写|完整|默认|说明|
-|--|----|------|------|------|
-|1|-m|--mock [fileName]|'all'|模拟接口服务，[fileName]当前目录下要mock的文件名，[all]默认当前目录下的所有文件|
-|2|-r|--regexp [regexp]|无|通过正则匹配需要mock的文件|
-|3|-s|--swagger [fileName]|无|通过swagger生成json模板文件，[fileName]当前目录下的swagger文件名|
-|4|-p|--port [port]|3000|指定mock的端口|
+
+| # | 缩写 | 完整 | 默认 | 说明 |
+| -- | ---- | ------ | ------ | ------ |
+| 1 | -m | --mock [fileName] | 'all' | 模拟接口服务，[fileName]当前目录下要mock的文件名，[all]默认当前目录下的所有文件 |
+| 2 | -r | --regexp [regexp] | 无 | 通过正则匹配需要mock的文件 |
+| 3 | -s | --swagger [fileName] | 无 | 通过swagger生成json模板文件，[fileName]当前目录下的swagger文件名 |
+| 4 | -p | --port [port] | 3000 | 指定mock的端口 |
 
 ## 完整模板及说明
 不管是json、js、swagger文件，最终都是转换成下面的格式进行处理。
@@ -154,6 +155,7 @@ $ ap-cli -m all -r /^a/
 ```
 
 ##### 主要属性说明
+
 | # | 字段 | 类型 | 说明 | 默认 | 是否必须 | 备注 |
 |---|------|----|----|----|----|----|
 |1| summary | string | 接口概述 | xxx接口 | 否 | 无 |
@@ -163,12 +165,14 @@ $ ap-cli -m all -r /^a/
 |5| response | / | 接口响应数据 | 无 | 是 | 无 |
 
 ##### 1-1. parameters属性说明
+
 | # | 字段 | 类型 | 说明 | 默认 | 是否必须 | 备注 |
 |---|------|----|----|----|----|----|
 |1| parsing | boolean | 是否解析 | false | 否 | 无 |
 |2| child | object [] | 子节点 | 无 | 否 | 子节点属性（详见1-1-1.child属性说明） |
 
 ##### 1-1-1. child属性说明
+
 | # | 字段 | 类型 | 说明 | 默认 | 是否必须 |
 |---|------|----|----|----|----|
 |1| key | string | 字段名称 | - | 是 |
@@ -177,4 +181,6 @@ $ ap-cli -m all -r /^a/
 |4| required | boolean | 是否必须 | false | 否 |
 |5| child | object [] | 子节点数据 | 无 | 否 |
 
-##
+
+---
+感谢您的阅读

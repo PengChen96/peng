@@ -487,3 +487,21 @@ pre > code {
     color: #008080; }
   .highlight .il {
     color: #099; }
+
+  table {
+      display: block;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin: 12px 0;
+  }
+  table tr {
+      /*background-color: #fff;*/
+  }
+  table tr:nth-child(2n) {
+      background-color: #f6f8fa;
+  }
+  table td, table th {
+      border: 1px solid #dfe2e5;
+      padding: 6px 13px;
+      /*word-break: keep-all;*/
+  }
