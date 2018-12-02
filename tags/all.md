@@ -22,7 +22,7 @@ categories: tags
 4. [格式化json数据](/code-snippet/json-format.html)  
 
 ### 小工具
-1. [前端mock数据脚手架](https://github.com/PengChen96/ap-cli)  
+1. [前端mock接口服务脚手架](/blog/2018/11/28/01.html)  
 
 <!--### 随便写写-->
 <!--[test](/essay/test.html)-->
