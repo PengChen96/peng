@@ -1,0 +1,124 @@
+---
+layout: article
+title:  "CSS变量"
+author: "pengchen"
+date:   2019-02-03
+illustration: "/resource/images/cover/css04.jpg"
+description: "通过js去改变css变量（var）来进行样式修改"
+categories: blog
+---
+
+### 问题：
+js怎么去修改css伪类样式呢？但是js并没有伪类选择器，那么该怎么办呢？网上有不少方法，比如通过切换元素的类、在style中动态插入新的样式等。
+
+那么这里再来一种方法，设置css变量（var），通过js去改变这个变量来实现。
+
+**示例：** 改变div的hover背景色
+
+```html
+<!-- css -->
+<style type="text/css">
+    :root {
+        --divHoverColor: red;
+    }
+    div {
+        width: 100px;
+        height: 100px;
+        background: bisque;
+    }
+    div:hover {
+        background: var(--divHoverColor);
+    }
+</style>
+<!-- html -->
+<div onClick="onDivClick('green')"/>
+<!-- js -->
+<script type="text/javascript">
+    function onDivClick(value){
+        document.documentElement.style.setProperty('--divHoverColor', value);
+    }
+</script>
+```
+
+### 那么，来认识下css variable吧
+#### 1. 基本用法
+局部变量
+```css
+div {
+    --masterColor: red;
+    background: var(--masterColor);
+}
+```
+全局变量
+```css
+/* 对于HTML来说，:root 表示 <html> 元素 */
+:root {
+    --masterColor: red;
+}
+div {
+    background: var(--masterColor);
+}
+```
+#### 2. 语法
+> **`var( <custom-property-name> [, <declaration-value> ]? )`**  
+
+`<custom-property-name> `: 自定义属性名  
+`<declaration-value>`: 声明值（fallback value）
+
+>**示例：**
+```css
+div {
+    /*
+    --masterColor未定义，所以背景色使用red 
+    它可以通过逗号分隔，定义多个声明值，var(--masterColor, red, green)
+    */
+    background: var(--masterColor, red);
+}
+```
+
+变量可以通过var()进行引用  
+>**示例：**
+```
+div {
+    --masterColor: red;
+    --bgColor: var(--masterColor)
+}
+```
+
+注意：属性名是不能使用变量的  
+>**错误示例：**
+```css
+div {
+    --bg: background;
+    var(--bg): red;
+}
+```
+
+#### 3. 浏览器支持
+[Can I use](https://caniuse.com/#search=css-variables)  
+>**使用@support检测**
+```css
+@supports ( (--masterColor: red)) {
+  /* supported */
+}
+@supports ( not (--masterColor: red)) {
+  /* not supported */
+}
+```
+
+>**使用JS检测**
+```javascript
+const isSupported = window.CSS && window.CSS.supports && window.CSS.supports('--masterColor', 'red');
+if (isSupported) {
+  /* supported */
+} else {
+  /* not supported */
+}
+```
+
+### 参考
+[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables)  
+[CSS Variable 规范](https://drafts.csswg.org/css-variables/)
+
+***
+感谢您的阅读

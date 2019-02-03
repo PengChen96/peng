@@ -35,7 +35,11 @@ categories: blog
 ```
 $ npm install ap-cli -g
 ```
-创建data.json
+生成模板
+```
+$ ap-cli init data
+```
+data.json
 ```
 [
   {
@@ -63,7 +67,7 @@ json模板格式查看[完整模板及说明](#完整模板及说明)
 #### 通过js方式模拟数据
 格式查看[完整模板及说明](#完整模板及说明)
 ##### data.js
-```
+```javascript
 const getUserList = () => {
   const data = {
     "summary": "获取用户列表(get方式)",
@@ -90,7 +94,6 @@ module.exports = {
 ```
 $ ap-cli -m data.js
 ```
-
 ##### 查看接口
 http://localhost:3000/api/get/userList
 
@@ -111,22 +114,28 @@ $ ap-cli -m all -r /^a/
 
 ## CLI用法
 
-| # | 缩写 | 完整 | 默认 | 说明 |
-| -- | ---- | ------ | ------ | ------ |
-| 1 | -m | --mock [fileName] | 'all' | 模拟接口服务，[fileName]当前目录下要mock的文件名，[all]默认当前目录下的所有文件 |
-| 2 | -r | --regexp [regexp] | 无 | 通过正则匹配需要mock的文件 |
-| 3 | -s | --swagger [fileName] | 无 | 通过swagger生成json模板文件，[fileName]当前目录下的swagger文件名 |
-| 4 | -p | --port [port] | 3000 | 指定mock的端口 |
+|#|缩写|完整|默认|说明|
+|--|----|------|------|------|
+|1|-m|--mock [fileName]|'all'|模拟接口服务，[fileName]当前目录下要mock的文件名，[all]默认当前目录下的所有文件|
+|2|-r|--regexp [regexp]|无|通过正则匹配需要mock的文件|
+|3|-s|--swagger [fileName]|无|通过swagger生成json模板文件，[fileName]当前目录下的swagger文件名|
+|4|-p|--port [port]|3000|指定mock的端口|
 
 ## 完整模板及说明
 不管是json、js、swagger文件，最终都是转换成下面的格式进行处理。
 ##### 示例
-```
+```json
 [
   {
+    "tags": "tags标签名",
     "summary": "获取用户信息接口json",
     "url": "/api/get/userinfo",
     "method": "post",
+    "paramsTable": [
+      "| 字段 | 类型 | 是否必须 | 说明 |\n",
+      "|------|------|------|------|\n",
+      "| id | string | 是 | 无 |\n"
+    ],
     "parameters": {
       "parsing": true,
       "child": [
@@ -160,26 +169,26 @@ $ ap-cli -m all -r /^a/
 |1| summary | string | 接口概述 | xxx接口 | 否 | 无 |
 |2| url | string | 接口地址 | /api | 是 | 无 |
 |3| method | string | http请求方式 | get | 是 | 无 |
-|4| parameters | / | 接口请求参数 | 无 | 否 | 可显示为表格（详见下1-1.parameters属性说明） |
-|5| response | / | 接口响应数据 | 无 | 是 | 无 |
+|4| paramsTable | array | 接口请求参数md表格 | 无 | 否 | 无 |
+|5| parameters | / | 接口请求参数 | 无 | 否 | 可显示为表格（详见下1-1.parameters属性说明） |
+|6| response | / | 接口响应数据 | 无 | 是 | 无 |
+|7| tags | string | 接口文档名称 | 无 | 否 | 无 |
 
 ##### 1-1. parameters属性说明
 
 | # | 字段 | 类型 | 说明 | 默认 | 是否必须 | 备注 |
 |---|------|----|----|----|----|----|
 |1| parsing | boolean | 是否解析 | false | 否 | 无 |
-|2| child | object [] | 子节点 | 无 | 否 | 子节点属性（详见1-1-1.child属性说明） |
+|2| child | object [] | 参数 | 无 | 否 | 无 |
 
-##### 1-1-1. child属性说明
-
+<!-- ##### 1-1-1. child属性说明
 | # | 字段 | 类型 | 说明 | 默认 | 是否必须 |
 |---|------|----|----|----|----|
 |1| key | string | 字段名称 | - | 是 |
 |2| type | string | 字段类型 | string | 是 |
 |3| description | string | 字段说明 | 无 | 否 |
 |4| required | boolean | 是否必须 | false | 否 |
-|5| child | object [] | 子节点数据 | 无 | 否 |
-
+|5| child | object [] | 子节点数据 | 无 | 否 | -->
 
 ---
 感谢您的阅读
