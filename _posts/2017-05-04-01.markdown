@@ -3,6 +3,8 @@ layout: article
 title:  "CSS揭秘之形状"
 author: "pengchen"
 date:   2017-05-04
+source: "原创"
+type: "CSS"
 illustration: "/resource/images/cover/css02.jpg"
 description: "我们肯定都注意到过，我们给一个正方形元素添加一个足够大的`border-radius`（指定大于正方形元素边长一半的半径），就可以使其变成一个圆形，那么我们如何来实现一个自适应的椭圆？"
 categories: blog

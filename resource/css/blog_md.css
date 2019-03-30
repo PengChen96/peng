@@ -7,6 +7,12 @@ dl, dd, ol, ul, figure {
   margin: 0;
   padding: 0; }
 
+hr {
+  margin: 12px 0px;
+  border: none;
+  height: 1px;
+  background: #999;
+}
 /**
  * Basic styling
  */
@@ -504,3 +510,4 @@ pre > code {
       padding: 6px 13px;
       /*word-break: keep-all;*/
   }
+

@@ -3,6 +3,8 @@ layout: article
 title:  "hello World!"
 author: "pengchen"
 date:   2014-09-01
+source: "Hello"
+type: "World"
 illustration: "/resource/images/hello.jpg"
 description: 'hello world! 很高兴遇到你！'
 categories: blog

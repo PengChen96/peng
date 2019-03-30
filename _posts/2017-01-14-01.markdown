@@ -3,6 +3,8 @@ layout: article
 title:  "python3基础学习笔记01"
 author: "pengchen"
 date:   2017-01-14
+source: "原创"
+type: "笔记 | python"
 illustration: "/resource/images/python.jpg"
 description: '学习Python3的一些笔记。'
 categories: blog

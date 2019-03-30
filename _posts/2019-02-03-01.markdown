@@ -3,6 +3,8 @@ layout: article
 title:  "CSS变量"
 author: "pengchen"
 date:   2019-02-03
+source: "原创"
+type: "CSS"
 illustration: "/resource/images/cover/css04.jpg"
 description: "通过js去改变css变量（var）来进行样式修改"
 categories: blog

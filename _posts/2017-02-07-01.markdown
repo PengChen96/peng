@@ -3,6 +3,8 @@ layout: article
 title:  "Python3简单爬虫——爬取豆瓣图片"
 author: "pengchen"
 date:   2017-02-07
+source: "原创"
+type: "python"
 illustration: "/resource/images/python.jpg"
 description: '网络爬虫，也称为蜘蛛程序(Spider)。网络爬虫是一个自动提取网页的程序，是搜索引擎的重要组成部分。作为爬虫来讲，就是尽可能多和快的给搜索引擎输送网页，实现强大的数据支持。'
 categories: blog

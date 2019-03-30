@@ -3,6 +3,8 @@ layout: article
 title:  "JS之事件绑定，事件冒泡与事件捕获"
 author: "pengchen"
 date:   2017-02-19
+source: "原创"
+type: "JS"
 illustration: "/resource/images/img/20170219.jpg"
 description: 'JS之事件绑定，事件冒泡与事件捕获'
 categories: blog

@@ -3,6 +3,8 @@ layout: article
 title:  "数字图像算法——图像二值化"
 author: "pengchen"
 date:   2017-01-12
+source: "原创"
+type: "JS"
 illustration: "/resource/images/coverImg/2017011201.png"
 description: '一幅完整的图像，是由红色、绿色、蓝色三个通道组成的。红色、绿色、蓝色三个通道的缩览图都是以灰度显示的。用不同的灰度色阶来表示" 红，绿，蓝"在图像中的比重。通道中的纯白，代表了该色光...'
 categories: blog

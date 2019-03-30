@@ -3,6 +3,8 @@ layout: article
 title:  "Three.js制作3D正方形"
 author: "pengchen"
 date:   2017-01-17
+source: "原创"
+type: "JS"
 illustration: "/resource/images/threejs.jpg"
 description: '学习three.js写的一个demo,仅做记录。'
 categories: blog

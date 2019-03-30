@@ -1,0 +1,186 @@
+---
+layout: article
+title:  "Rollup.js笔记"
+author: "pengchen"
+date:   2019-03-30
+source: "原创"
+type: "笔记 | JS"
+illustration: "/resource/images/cover/rollup.jpg"
+description: "Rollup 是一个 JavaScript 模块打包器，可以将小块代码编译成大块复杂的代码，例如 library 或应用程序。"
+categories: blog
+---
+
+
+
+## Rollup.js概述
+Rollup 是一个 JavaScript 模块打包器，可以将小块代码编译成大块复杂的代码，例如 library 或应用程序。Rollup 对代码模块使用新的标准化格式，这些标准都包含在 JavaScript 的 ES6 版本中，而不是以前的特殊解决方案，如 CommonJS 和 AMD。ES6 模块可以使你自由、无缝地使用你最喜爱的 library 中那些最有用独立函数，而你的项目不必携带其他未使用的代码。ES6 模块最终还是要由浏览器原生实现，但当前 Rollup 可以使你提前体验。
+
+### 零. 开始
+
+#### install
+```
+<!--全局安装-->
+$ npm install rollup --global
+```
+
+#### 1. 新建依赖文件lib.js 和 入口文件index.js
+**lib.js**
+```javascript
+export function funA() {
+    console.log('fun A');
+}
+```
+**index.js**
+```javascript
+import { funA } from './lib';
+funA();
+```
+
+#### 2. 使用rollup打包
+**对于浏览器：**
+```
+$ rollup index.js --file bundle.js --format iife
+```
+打出来的文件bundle.js
+```javascript
+(function () {
+    'use strict';
+    
+    function funA() {
+        console.log('fun A');
+    }
+    
+    funA();
+}());
+```
+
+**对于Node.js：**
+```
+$ rollup index.js --file bundle.js --format cjs
+```  
+打出来的文件bundle.js
+```javascript
+'use strict';
+
+function funA() {
+    console.log('fun A');
+}
+
+funA();
+```
+
+**对于浏览器和Node.js：**
+```
+$ rollup index.js --file bundle.js --format umd
+```
+打出来的文件bundle.js  
+```javascript
+(function (factory) {
+    typeof define === 'function' && define.amd ? define(factory) :
+    factory();
+}(function () { 'use strict';
+
+    function funA() {
+        console.log('fun A');
+    }
+
+    funA();
+
+}));
+```
+
+#### 3. 使用配置文件
+每次使用上面的命令行，当参数多了，还是有点麻烦的，所以我们创建一个配置文件来包含所需要的选项。
+
+**3.1 新建rollup.config.js配置文件**
+```javascript
+export default {
+  input: 'index.js',
+  output: {
+    file: 'bundle.js',
+    format: 'iife'
+  }
+};
+```
+**3.2 执行命令打包**
+```
+$ rollup -c
+```
+当然，你也可以使用命令行去覆盖配置文件。
+```javascript
+$ rollup -c --file bundle_new.js
+```
+
+#### 4. 使用插件
+我们以`rollup-plugin-json`为例，让rollup读取json文件数据。
+
+##### 4.1 安装依赖
+```javascript
+npm install rollup-plugin-json --save-dev
+```
+##### 4.2 编辑文件
+**index.js**
+```javascript
+import { version } from './package.json';
+
+export default function () {
+    console.log('version ' + version);
+}
+```
+
+**rollup.config.js**
+```javascript
+import json from 'rollup-plugin-json';
+
+export default {
+    input: 'index.js',
+    output: {
+        file: 'bundle.js',
+        format: 'cjs'
+    },
+    plugins: [ json() ]
+};
+```
+
+执行命令，打出来的文件bundle.js
+```javascript
+'use strict';
+
+var version = "1.0.0";
+
+function getVersion() {
+    console.log('version ' + version);
+}
+
+module.exports = getVersion;
+```
+
+#### 5. JavaScript API
+
+```javascript
+const rollup = require('rollup');
+
+const inputOptions = {
+	input: "index.js"
+};
+const outputOptions = {
+	file: 'bundle_api.js',
+    format: 'cjs'
+};
+
+async function build() {
+  // create a bundle
+  const bundle = await rollup.rollup(inputOptions);
+
+  // generate code and a sourcemap
+  // const { code, map } = await bundle.generate(outputOptions);
+
+  // or write the bundle to disk
+  await bundle.write(outputOptions);
+}
+
+build();
+```
+
+***
+感谢您的阅读

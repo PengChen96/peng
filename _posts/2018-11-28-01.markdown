@@ -3,6 +3,8 @@ layout: article
 title:  "mock接口服务脚手架【ap-cli】"
 author: "pengchen"
 date:   2018-11-28
+source: "原创"
+type: "CLI"
 illustration: "/resource/images/cover/ap_cli.png"
 description: "依据接口定义，帮助你快速的完成接口模拟工作。"
 categories: blog
