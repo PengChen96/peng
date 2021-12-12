@@ -22,5 +22,6 @@
 
 ### 小工具
 1. [前端mock接口服务脚手架](https://blog.pengchen.site/blog/2018/11/28/01.html)  
+2. [30S搞定前端表格导出Excel](https://blog.pengchen.site/blog/2021/12/12/01.html)  
 
 ---

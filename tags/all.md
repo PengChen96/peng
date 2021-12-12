@@ -26,6 +26,7 @@ categories: tags
 
 ### 小工具
 1. [前端mock接口服务脚手架](/blog/2018/11/28/01.html)  
+2. [30S搞定前端表格导出Excel](/blog/2021/12/12/01.html) 
 
 <!--### 随便写写-->
 <!--[test](/essay/test.html)-->
