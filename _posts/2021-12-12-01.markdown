@@ -1,0 +1,171 @@
+---
+layout: article
+title:  "30S搞定前端表格导出Excel"
+author: "pengchen"
+date:   2021-12-12
+source: "原创"
+type: "工具 | JS"
+illustration: "/resource/images/cover/table-xlsx.png"
+description: "基于SheetJS封装，帮助你快速将xlsx文件转换成表格数据或表格数据导出生成xlsx文件，导出支持简单样式设置、多sheet页、行/列合并等"
+categories: blog
+---
+
+
+<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1860edade11649c48628e65351dacf5b~tplv-k3u1fbpfcp-zoom-1.image"/> 
+
+## 前言
+项目开发中，总会遇到将表格导出成Excel文件或解析Excel展示的需求，为了能快速解决这类导出或解析的需求，于是基于SheetJs封装了[table-xlsx](https://github.com/PengChen96/table-xlsx)，能够帮助你快速将xlsx文件转换成表格数据或表格数据导出生成xlsx文件。
+
+**主要功能：**
+- [x] 导出Excel支持行/列合并
+- [x] 导出Excel支持多sheet页
+- [x] 导出Excel支持简单样式的设置
+- [x] 解析Excel生成表格数据
+
+文档&演示地址：https://pengchen96.github.io/table-xlsx/docs/intro/
+
+## 开始
+### 安装
+**使用npm或yarn**
+```shell
+npm install --save table-xlsx @pengchen/xlsx
+# or
+yarn add table-xlsx @pengchen/xlsx
+```
+**使用CDN**
+```html
+<!-- 注意: 部署时，将 "development.umd.js" 替换为 "production.umd.js"-->
+<script crossorigin src="https://unpkg.com/table-xlsx/dist/table-xlsx.development.umd.js"></script>
+```
+
+### 使用
+```javascript
+import { exportFile } from "table-xlsx";
+
+const columns = [
+  { title: '姓名', dataIndex: 'name' },
+  { title: '年龄', dataIndex: 'age' },
+  { title: '住址', dataIndex: 'address' },
+];
+const dataSource = [
+  { key: '1', name: '胡彦斌', age: 32, address: '西湖区湖底公园1号' },
+  { key: '2', name: '胡彦祖', age: 42, address: '西湖区湖底公园1号' },
+];
+
+exportFile({ columns, dataSource });
+```
+
+## 示例
+
+### 行/列合并
+行/列合并API参考[antd](https://ant.design/components/table-cn/#components-table-demo-colspan-rowspan)  
+使用 render 里的单元格属性 colSpan 或者 rowSpan 设值为 0 时，设置的表格不会渲染。
+
+```js
+import { exportFile } from "table-xlsx";
+
+const columns = [
+    {
+      title: '姓名', dataIndex: 'name',
+      render: (value, row, index) => {
+        const obj = { children: value, props: {}, };
+        if (index === 0) {obj.props.colSpan = 2; }
+        return obj;
+      }
+    },
+    {
+      title: '年龄', dataIndex: 'age',
+      render: (value, row, index) => {
+        const obj = { children: value, props: {}, };
+        if (index === 0) { obj.props.colSpan = 0; }
+        return obj;
+      }
+    },
+    {
+      title: '住址', dataIndex: 'address',
+      render: (value, row, index) => {
+        const obj = { children: value, props: {}, };
+        if (index === 0) { obj.props.rowSpan = 2; }
+        if (index === 1) { obj.props.rowSpan = 0; }
+        return obj;
+      }
+    },
+  ];
+const dataSource = [
+  { key: '1', name: '胡彦斌', age: 32, address: '西湖区湖底公园1号' },
+  { key: '2', name: '胡彦祖', age: 42, address: '西湖区湖底公园1号' },
+];
+
+exportFile({ columns, dataSource });
+```
+
+### 多sheet页
+通过设置sheetNames、columns和dataSource为二维数组，可以导出多sheet页excel文件。
+
+```js
+import { exportFile } from "table-xlsx";
+
+const columns = [
+  { title: '姓名', dataIndex: 'name' },
+  { title: '年龄', dataIndex: 'age' },
+  { title: '住址', dataIndex: 'address' },
+];
+const dataSource = [
+  { key: '1', name: '胡彦斌', age: 32, address: '西湖区湖底公园1号' },
+  { key: '2', name: '胡彦祖', age: 42, address: '西湖区湖底公园1号' },
+];
+
+exportFile({ 
+  sheetNames: ['sheet1', 'sheet2', 'sheet3'],
+  columns: [columns, columns, columns],
+  dataSource: [dataSource, dataSource, dataSource],
+});
+```
+
+### 设置样式
+目前只支持xlsx单元格边框、字体、对齐方式、填充颜色的简单设置
+
+```js
+import { exportFile } from "table-xlsx";
+
+const columns = [
+  { title: '姓名', dataIndex: 'name' },
+  { title: '年龄', dataIndex: 'age' },
+  { title: '住址', dataIndex: 'address' },
+];
+const dataSource = [
+  { key: '1', name: '胡彦斌', age: 32, address: '西湖区湖底公园1号' },
+  { key: '2', name: '胡彦祖', age: 42, address: '西湖区湖底公园1号' },
+];
+
+exportFile({
+  columns, 
+  dataSource,
+  cellStyle: {
+    borderColorRgb: '333'
+  },
+  headerCellStyle: {
+    fontColorRgb: 'FF8040'
+  },
+  bodyCellStyle: {
+    fillFgColorRgb: 'EEEEE0'
+  },
+});
+```
+
+更多示例您可以在[演示文档](https://pengchen96.github.io/table-xlsx/en/docs/tutorial-extras/colspan-rowspan)中查看，通过在结果下方编辑器中进行编辑试验。
+
+## 最后
+- table-xlsx目前实现了简单的表格导出和解析功能，后续会慢慢完善，增加更多的配置项，比如行高、批量设置样式等。  
+- 如果您发现文档方面的问题或对总体上如何改进文档或项目有建议，欢迎大家给我提[Issues](https://github.com/PengChen96/table-xlsx/issues)或联系我。
+各位大佬觉得还不错的话，帮忙点个[Star](https://github.com/PengChen96/table-xlsx)支持一下吧，感谢。
+
+
+**依赖&参考**  
+https://github.com/SheetJS/sheetjs   
+https://github.com/protobi/js-xlsx  
+https://ant.design/components/table-cn/#API
+
+
+***
+感谢您的阅读
