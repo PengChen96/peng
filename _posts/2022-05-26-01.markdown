@@ -1,0 +1,319 @@
+---
+layout: article
+title:  "commonJS模块 require实现"
+author: "pengchen"
+date:   2022-05-26
+source: "原创"
+type: "node | CJS"
+illustration: "/resource/images/cover/nodejs.png"
+description: "CommonJS模块是Node.js打包JavaScript代码的原始方式。在Node.js中，每个文件都被视为一个单独的模块。"
+categories: blog
+---
+
+## commonJS模块/require实现
+
+### 介绍
+CommonJS模块是Node.js打包JavaScript代码的原始方式。  
+在Node.js中，每个文件都被视为一个单独的模块。  
+Node.js有两个模块系统：CommonJS模块 和 ECMAScript模块。(从 Node.js v13.2 版本开始，Node.js 默认打开了 ES 模块支持。)  
+调用require()始终使用CommonJs模块加载器。调用Import()始终使用ECMAScript模块。  
+
+### require(id)
+- id <string> 模块名称或路径
+- 返回: <any> 导出的模块内容
+
+#### 伪代码
+[require() 伪代码](http://nodejs.cn/api-v16/modules.html#all-together)
+
+#### 本文主要实现步骤3加载本地的模块
+```
+3. If X begins with './' or '/' or '../'
+   a. LOAD_AS_FILE(Y + X) 
+   b. LOAD_AS_DIRECTORY(Y + X) 
+   c. THROW "not found"
+
+LOAD_AS_FILE(X)
+1. If X is a file, load X as its file extension format. STOP
+2. If X.js is a file, load X.js as JavaScript text. STOP
+3. If X.json is a file, parse X.json to a JavaScript Object. STOP
+4. If X.node is a file, load X.node as binary addon. STOP
+```
+
+```
+LOAD_AS_FILE(X) 大致流程是:
+1. require(id);
+2. Module._load(request, parent, isMain);  
+   如果Module._cache有缓存过，直接返回这个值。没有则继续。
+3. 实例化module，缓存module，执行module.load(filename);  
+   const filename = Module._resolveFilename(request, parent, isMain);  
+   const module = new Module(filename, parent);  
+   Module._cache[filename] = module;  
+   module.load(filename);  
+4. 获取文件后缀，执行Module._extensions[.js|.json|.node];  
+   通过fs.readFileSync读取文件  
+   遇到.js，将内容包裹成一个函数，然后执行  
+   遇到.json，将内容转成对象，赋值给module.exports
+```
+
+#### 一、核心逻辑实现
+##### 1. 定义require(id)方法
+```javascript
+const MySampleRequire = (id) => {
+  return Module._load(id, this, /* isMain */ false);
+}
+```
+##### 2. 定义Module模块
+```javascript
+function Module(id = '', parent) {
+  this.id = id;
+  this.exports = {};
+  this.filename = null;
+  this.loaded = false;
+}
+```
+##### 3. 定义模块加载方法
+```javascript
+Module._load = function (request, parent, isMain) {
+  const filename = Module._resolveFilename(request, parent, isMain);
+  const module = new Module(filename, parent);
+  module.load(filename);
+  return module.exports;
+}
+Module._resolveFilename = function (request, parent, isMain) {
+  return path.resolve(__dirname, request);
+}
+Module.prototype.load = function(filename) {
+  const extension = path.extname(filename);
+  Module._extensions[extension](this, filename);
+  this.loaded = true;
+}
+```
+##### 4. 通过fs模块读取文件，然后根据后缀处理文件内容
+`.json`的话就直接将内容赋值给module.exports
+```javascript
+Module._extensions['.json'] = function(module, filename) {
+  const content = fs.readFileSync(filename, 'utf8');
+  module.exports = JSON.parse(content);
+};
+```
+`.js`的话会把文件内容包裹成一个函数字符串，使用vm.runInThisContext去运行返回一个函数，然后通过call将this指向module.exports执行函数
+```javascript
+Module._extensions['.js'] = function(module, filename) {
+  const content = fs.readFileSync(filename, 'utf8');
+  module._compile(content, filename);
+};
+Module.prototype._compile = function (content, filename) {
+  let functionStr = wrap(content);
+  let fn = vm.runInThisContext(functionStr);
+  const dirname = path.dirname(filename);
+  const exports = this.exports;
+  const require = this.require;
+  const module = this;
+  const thisValue = exports;
+  fn.call(thisValue, exports, require, module, filename, dirname);
+}
+
+let wrap = function(script) {
+  return Module.wrapper[0] + script + Module.wrapper[1];
+};
+
+Module.wrapper = [
+  '(function (exports, require, module, __filename, __dirname) { ',
+  '\n});'
+];
+```
+
+[完整代码](https://github.com/PengChen96/case/blob/master/require-case/MyRequireBasic.js)
+
+##### 验证一下
+我们新建test.js和test.json文件，然后通过我们写的MyRequire方法去加载它。
+```javascript
+// test.js
+const sum = (a, b) => {
+  return a+b;
+}
+module.exports = { sum };
+```
+```json5
+// test.json
+{
+  "name": "myRequire",
+  "version": "0.0.1"
+}
+```
+```javascript
+// MyRequireBasic.js
+const { sum } = MyRequire('./test.js');
+console.log(sum(1, 2)); // 3
+const {name, version} = MyRequire('./test.json');
+console.log(name, version);  // myRequire 0.0.1
+```
+执行`node MyRequireBasic.js`后结果符合我们的预期，到这一个简单的require就实现了。
+
+#### 省略模块后缀名
+我们会省略后缀名`require('./test')`这样去引入模块，我们处理一下这种情况给它加上后缀。
+大致流程是判断文件是否存在，不存在就遍历所有的后缀名拼接上再判断文件是否存在。
+大致流程是:
+```
+1. const paths = Module._resolveLookupPaths(request, parent);  
+   拿到父级目录
+2. const filename = Module._findPath(request, paths, isMain, false);  
+   拿到文件绝对路径  
+   判断是否是绝对路径  
+   判断是否有该request和paths的缓存，有就返回entry  
+   判断request最后一个字符是否是'/'，得到trailingSlash  
+   for循环paths  
+     const basePath = path.resolve(curPath, request);  
+     获取当前文件绝对路径basePath  
+     // const rc = stat(basePath)判断文件是否存在，0：存在 1：文件夹存在 2：文件或文件夹不存在  
+     if !trailingSlash, 不是'/'结尾  
+        if rc===0, filename = toRealPath(basePath)  
+        if !filename, 
+            exts = ObjectKeys(Module._extensions)
+            filename = tryExtensions(basePath, exts, isMain)
+     if !filename && rc===1, // Directory
+        exts = ObjectKeys(Module._extensions)
+        filename = tryPackage(basePath, exts, isMain, request)
+     if filename, 设置缓存Module._pathCache，return filemame
+   return false;
+       
+tryExtensions(basePath, exts, isMain)
+   for循环exts
+      给basePath拼接上后缀，判断文件是否存在，存在则返回filename
+```
+
+##### 代码实现
+1. 修改下Module._resolveFilename方法
+```javascript
+Module._resolveFilename = function (request, parent, isMain) {
+  // 返回父级目录
+  let paths = Module._resolveLookupPaths(request, parent);
+  // 返回文件存在的路径
+  const filename = Module._findPath(request, paths, isMain, false);
+  return filename;
+}
+```
+2. 实现Module._findPath方法
+```javascript
+Module._findPath = function(request, paths, isMain) {
+  for (let i = 0; i < paths.length; i++) {
+    const curPath = paths[i];
+    const basePath = path.resolve(curPath, request);
+    let exts;
+    let filename;
+    const rc = stat(basePath);
+    if (rc === 0) {
+      filename = toRealPath(basePath);
+    }
+    if (!filename) {
+      if (exts === undefined) {
+        exts = Reflect.ownKeys(Module._extensions);
+      }
+      filename = tryExtensions(basePath, exts, isMain);
+    }
+    if (filename) {
+      return filename;
+    }
+  }
+  return false;
+}
+```
+2.1 通过fs模块实现stat方法
+```javascript
+// 判断文件是否存在，0：存在 1：文件夹存在 2：文件或文件夹不存在
+function stat(path) {
+  let flag;
+  try {
+    const stats = fs.statSync(path);
+    flag = stats.isDirectory() ? 1 : 0;
+  } catch (e) {
+    flag = 2;
+  }
+  return flag;
+}
+```
+2.2 tryExtensions方法，文件不存在的话给添加上后缀
+```javascript
+function tryExtensions(p, exts, isMain) {
+  for (let i = 0; i < exts.length; i++) {
+    const filename = tryFile(p + exts[i], isMain); // 判断文件存在
+    if (filename) {
+      return filename;
+    }
+  }
+  return false;
+}
+function tryFile(requestPath, isMain) {
+  const rc = stat(requestPath);
+  if (rc !== 0) return;
+  return toRealPath(requestPath);
+}
+function toRealPath(requestPath) {
+  return fs.realpathSync(requestPath);
+}
+```
+3. 实现Module._resolveLookupPaths方法
+获取这个父级目录，我们可以直接通过parent.filename去拿它的目录
+```javascript
+Module._resolveLookupPaths = function(request, parent) {
+  const parentDir = [path.dirname(parent.filename)];
+  return parentDir;
+}
+```
+这个parent就是它父级的Module模块，filename就是它父级的文件路径，我们在load方法中添加`this.filename = filename;`;
+```javascript
+Module.prototype.load = function(filename) {
+  this.filename = filename;
+  // ...
+}
+```
+到这里还有一点问题，就是我们第一次执行require时，还是没有parent的。那我们就要讲下node执行文件，
+其实node执行文件跟我们的require是一样的，它会去调用`runMain(main = process.argv[1])`，
+然后会去调用`Module._load(main, null, true)`，这样就跟我们的require走到一起了。
+
+这里为了验证下省略后缀名，就改动下我们的MyRequire，传入它的父级模块。
+```javascript
+Module.prototype.require = MyRequire = (id, mainModule) => {
+  let parent = mainModule || this;
+  return Module._load(id, parent, /* isMain */ false);
+}
+```
+验证
+```javascript
+// MyRequire.js
+const { sum } = MyRequire('./test', module);
+console.log(sum(1, 2)); // 3
+```
+然后我们执行`node MyRequire.js`，结果符合预期。
+
+[完整代码](https://github.com/PengChen96/case/blob/master/require-case/MyRequire.js)
+
+#### 二、加入缓存
+添加缓存，就是以filename为key，module为value存到Module._cache中，加载文件时先去_cache中去查找，存在就返回，不存在就去加载文件，然后放入缓存。
+1. 修改Module._load方法
+```javascript
+Module._load = function (request, parent, isMain) {
+  const filename = Module._resolveFilename(request, parent, isMain);
+  const cachedModule = Module._cache[filename];
+  if (cachedModule !== undefined) {
+    return cachedModule.exports;
+  }
+  const module = new Module(filename, parent);
+  Module._cache[filename] = module; // 加入缓存
+  let threw = true;
+  try {
+    module.load(filename);
+    threw = false;
+  } finally {
+    if (threw) { // 加载失败移除缓存
+       delete Module._cache[filename];
+    }
+  }
+  return module.exports;
+}
+```
+[完整代码](https://github.com/PengChen96/case/blob/master/require-case/MyRequire.js)
+
+**参考**  
+http://nodejs.cn/api-v16/modules.html  
+https://github.com/nodejs/node
